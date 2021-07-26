@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+
+        body { background-color: #e8e8e8; margin: 0px; padding: 0px;  font-family: Tahoma;  }
+        form, table { display: block; width: 400px; margin: auto; }
+        span { display: block; padding: 15px; margin 22px;  }
+        h2 { background-color: #8cb2e5; width: 100%; height: 60px;  margin-top: 0px; margin-bottom: 20px; border-bottom: 1px; solid gray; border-top: 1px; solid white; text-align: center;    text-shadow: 0px 1px 2px #000000; padding-top: 20px; color: white; }
+        h3 { text-align: center;  }
+
+        input[type="submit"] {  color: white; background-color: #2a54ff; border: 3px solid transparent; margin-top: 15px; padding: 8px 18px;  border-radius: 4px; width: 70%;
+      		display: block;  font-weight: bold;
+      	    filter: drop-shadow(1px 1px 2px #8594a6);             box-shadow:  inset 0 0px 0px 2px #e8e8e8;
+            -moz-box-shadow:    inset 0 0px 0px 2px #e8e8e8;
+            -webkit-box-shadow: inset 0 0px 0px 2px #e8e8e8;
+      	}
+
+    </style>
+</head>
+<body>
+
+<h2> Projekty </h2>
+
+
+<th:block th:if="${error!=''}" >  <h3 th:text="${error}" style="color: red;"></h3>  </th:block>
+<th:block th:if="${result!=''}" >  <h3 th:text="${result}"></h3>  </th:block>
+
+
+
+    <form th:action="@{'/list'}" method="post" enctype="multipart/form-data">
+
+
+       <span>
+           <label>Kod produktu: </label>
+           <input type="text" name="code" id="code"/>
+       </span>
+
+        <input type="submit" value="szukaj" class="submit" />
+
+    </form>
+
+    <th:block th:if="${not #lists.isEmpty(fileList)}">
+        <table>
+        <tbody>
+            <tr th:each="name : ${fileList}">
+                <td>
+
+                </td>
+                <td>
+                    <a th:href="@{'/list/'+${code}+'/'+${name}}" th:text="${name}"></a>
+                </td>
+            </tr>
+            <tr><td></td></tr>
+        <tr>
+            <td>
+                <a th:href="@{'/listmont/'+${code} }">Pobierz zmontowany</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    </th:block>
+
+
+</body>
+</html>
