@@ -18,61 +18,42 @@ public class ProjectService implements ProjectRepo{
 
     @Override
     public <S extends Project> S save(S s) {
-        return null;
+        return projectRepo.save( s );
     }
 
-    @Override
-    public <S extends Project> Iterable<S> saveAll(Iterable<S> iterable) {
-        return null;
-    }
 
     @Override
     public Optional<Project> findById(Long aLong) {
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean existsById(Long aLong) {
-        return false;
+        return projectRepo.findById( aLong );
     }
 
     @Override
     public Iterable<Project> findAll() {
-        return null;
+        return projectRepo.findAll();
     }
 
-    @Override
-    public Iterable<Project> findAllById(Iterable<Long> iterable) {
-        return null;
-    }
 
     @Override
     public long count() {
-        return 0;
+        return projectRepo.count();
     }
 
-    @Override
-    public void deleteById(Long aLong) {
+    //   * * * * * *   F A K E   * * * * * *
 
+    @Override public <S extends Project> Iterable<S> saveAll(Iterable<S> iterable) {
+        return null;
     }
-
-    @Override
-    public void delete(Project project) {
-
+    @Override public boolean existsById(Long aLong) {
+        return false;
     }
-
-    @Override
-    public void deleteAllById(Iterable<? extends Long> iterable) {
-
+    @Override public Iterable<Project> findAllById(Iterable<Long> iterable) {
+        return null;
     }
+    @Override public void deleteById(Long aLong) { }
+    @Override public void delete(Project project) { }
+    @Override public void deleteAllById(Iterable<? extends Long> iterable) { }
+    @Override public void deleteAll(Iterable<? extends Project> iterable) { }
+    @Override public void deleteAll() {}
 
-    @Override
-    public void deleteAll(Iterable<? extends Project> iterable) {
 
-    }
-
-    @Override
-    public void deleteAll() {
-
-    }
 }
