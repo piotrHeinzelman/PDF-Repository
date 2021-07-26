@@ -3,26 +3,28 @@ package com.heinzelman.pdf_repo.model;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+@SpringBootTest
 class PDFNameServiceTest {
 
     @Autowired
-    private ProjectRepo projectRepo;
+    private  PDFNameService pdfNameService;
 
-    @Autowired
-    private PDFNameRepo pdfNameRepo;
 
     @Test
-    void save() {
-        PDFName arch = new PDFName();
-        arch.setOldFileName("c:\\temp\\some_File.pdf");
-        assertNotNull( arch );
-        assertNull( arch.getId() );
-        pdfNameRepo.save( arch );
-        assertNotNull( arch.getId() );
+    void saveService(){
+        PDFName tech = new PDFName();
+        tech.setOldFileName("c:\\temp\\some_Tech.pdf");
+        assertNotNull( tech );
+        assertNull( tech.getId() );
+        tech = pdfNameService.save( tech );
+        System.out.println( tech );
+        assertNotNull( tech.getId() );
+
     }
+
 
 }

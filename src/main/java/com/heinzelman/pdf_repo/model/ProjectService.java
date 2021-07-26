@@ -15,7 +15,6 @@ public class ProjectService implements ProjectRepo{
         this.projectRepo = projectRepo;
     }
 
-
     @Override
     public <S extends Project> S save(S s) {
         return projectRepo.save( s );
