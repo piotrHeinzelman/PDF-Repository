@@ -19,8 +19,11 @@ public class Project {
     private Long id;
     private String name;
     private Long serialNumber;
+    private Boolean isValid;
 
     public Project() {}
+
+    // ?
 
 
 }
