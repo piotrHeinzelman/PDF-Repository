@@ -17,7 +17,6 @@ public class PDFName {
     @Column(name = "id")
     private Long id;
 
-
     private String oldFileName;
     private Long serialNumber;
 
@@ -36,12 +35,4 @@ public class PDFName {
         return Objects.hash(id);
     }
 
-    @Override
-    public String toString() {
-        return "PDFName{" +
-                "id=" + id +
-                ", oldFileName='" + oldFileName + '\'' +
-                ", serialNumber=" + serialNumber +
-                '}';
-    }
 }

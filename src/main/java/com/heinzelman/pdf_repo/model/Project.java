@@ -26,33 +26,6 @@ public class Project {
     @ManyToMany
     private Map<PdfType, PDFName> pdfs = new HashMap<>();
 
-    /*
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "a_id", referencedColumnName = "id")
-    private PDFName A;  // Arch
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ao_id", referencedColumnName = "id")
-    private PDFName AO; // Arch cOver
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "t_id", referencedColumnName = "id")
-    private PDFName T;  // Tech
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "to_id", referencedColumnName = "id")
-    private PDFName TO; // Tech cOver
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "c_id", referencedColumnName = "id")
-    private PDFName C;  // Calculation
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "co_id", referencedColumnName = "id")
-    private PDFName CO; // Calculation cOver
-
-    */
-
     public Project() {}
 
     public Project( String name ) {
@@ -63,13 +36,7 @@ public class Project {
         this.name = name.trim().toUpperCase();
     }
 
-    @Override
-    public String toString() {
-        return "Project{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
+
 
     @Override
     public boolean equals(Object o) {

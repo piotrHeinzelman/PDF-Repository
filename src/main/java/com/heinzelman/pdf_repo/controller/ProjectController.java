@@ -37,13 +37,13 @@ public class ProjectController {
     @Value("${targetfolder}")
     private String folder;
 
-
+/*
     @GetMapping("/project")
     public String listProject( Model model ){
         //System.out.println( folder );
         return "project_list";
     }
-
+*/
 
 
 
