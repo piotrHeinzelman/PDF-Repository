@@ -49,18 +49,18 @@ public class ProjectController {
 
 
 
-    @PostMapping("/project")
+    @PostMapping("/projectfind")
     public String listProject_POST(Model model , @RequestParam String code ){
-        if ( code==null ) return "project_list";
+        if ( code==null )                                                      {  return "index" ; /*model.addAttribute("error","pusty kod");  return listProject(model); */ }
         code = code.trim().toUpperCase();
-        if ( code.equals("")) return "project_list";
+        if ( code.equals(""))                                                  {  return "index" ; /*model.addAttribute("error","pusty kod");  return listProject(model); */ }
 
         List<Project> projectList = projectService.findByNameContains( code );
-        if ( projectList.size()==0 ) { model.addAttribute( "code", code );  return "project_add"; }
-        System.out.println( projectList );
+        //if ( projectList.size()==0 ) { model.addAttribute( "code", code );  return "index" ; /*model.addAttribute("error","nie ma takiego kodu");  return listProject(model); } */ }
+        //System.out.println( projectList );
         model.addAttribute( "projectList", projectList );
 
-        return "project_list";
+        return "index";
     }
 
 
@@ -68,24 +68,30 @@ public class ProjectController {
     @PostMapping("/projectadd")
     public String addProject(Model model , @RequestParam String code ){
 
-        if ( code==null ) return "project_list";
+        if ( code==null )                                                      { return "index" ; /*model.addAttribute("error","pusty kod");  return listProject(model);*/ }
         code = code.trim().toUpperCase();
-        if ( code.equals("")) return "project_list";
+        if ( code.equals(""))                                                  {  return "index" ; /*model.addAttribute("error","pusty kod");  return listProject(model);*/ }
 
         Project newProject = projectService.findByName( code ).orElse( new Project( code ) );
-        if ( newProject.getId()==null) projectService.save( newProject );
+
+        if ( newProject.getId()==null ) projectService.save( newProject );
 
         model.addAttribute("projectList", List.of( newProject ));
-        return "project_list";
+        return "index";
     }
+
+
+
+
+
 
 
     @GetMapping("/project/{id}")
     public String listProject_POST(Model model , @PathVariable Long id){
-        if ( id==null ) return "project_list";
+        if ( id==null ) return "index";
 
         Optional<Project> reply  = projectService.findById( id );
-        if ( reply.isEmpty() ) return "project_list";
+        if ( reply.isEmpty() ) return "index";
         Project project = reply.get();
 
         String code = project.getName(); model.addAttribute("code",code);
@@ -97,8 +103,10 @@ public class ProjectController {
         /*if ( project.getA()!=null)*/ model.addAttribute("C",project.getC());
         /*if ( project.getA()!=null)*/ model.addAttribute("CO",project.getCO());
 
-        return "pdf_add";
+        return "index";
     }
+
+
 
 
     @PostMapping("/pdf_add")

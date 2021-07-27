@@ -1,0 +1,126 @@
+<html th:fragment="layout (template, menu)" xmlns:th="http://www.w3.org/1999/xhtml">
+<body>
+  <form>
+    <th:block th:fragment="input (label, name, type)">
+      <div th:with="valid=${!#fields.hasErrors(name)}"
+        th:class="${'form-group' + (valid ? '' : ' has-error')}"
+        class="form-group">
+        <label class="col-sm-2 control-label" th:text="${label}">Label</label>
+        <div class="col-sm-10">
+            <div th:switch="${type}">
+                <input th:case="'text'" class="form-control" type="text" th:field="*{__${name}__}" />
+                <input th:case="'date'" class="form-control" type="text" th:field="*{__${name}__}"
+                        placeholder="YYYY-MM-DD" title="Enter a date in this format: YYYY-MM-DD"
+                        pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))"/>
+            </div>
+          <span th:if="${valid}"
+            class="glyphicon glyphicon-ok form-control-feedback"
+            aria-hidden="true"></span>
+          <th:block th:if="${!valid}">
+            <span
+              class="glyphicon glyphicon-remove form-control-feedback"
+              aria-hidden="true"></span>
+            <span class="help-inline" th:errors="*{__${name}__}">Error</span>
+          </th:block>
+        </div>
+      </div>
+    </th:block>
+  </form>
+
+
+
+
+
+
+  <th:block th:fragment="addCode()">
+      <form th:action="@{'/projectadd'}" method="post" enctype="multipart/form-data">
+          <label>dodaj projekt: (kod)</label>
+          <input type="text" name="code" id="code"/>
+          <input type="submit" value="dodaj" class="submit" />
+      </form>
+  </th:block>
+
+
+  <th:block th:fragment="findCode()">
+      <form th:action="@{'/projectfind'}" method="post" enctype="multipart/form-data">
+          <label>szukaj projektu:</label>
+          <input type="text" name="code" id="code"/>
+          <input type="submit" value="szukaj" class="submit" />
+      </form>
+  </th:block>
+
+
+
+
+  <th:block th:fragment="listCode()" th:if="${not #lists.isEmpty(projectList)}">
+      <span>lista projektów o kodzie %?%</span>
+      <table>
+          <tbody>
+          <tr th:each="project : ${projectList}">
+              <td>
+                  <a th:href="@{'/project/'+${project.getId()}}" th:text="${project.getName()}"></a>
+              </td>
+              <td>
+                  <a th:href="@{'/projectmont/'+${project.getId()}}">pobierz zmontowany</a>
+              </td>
+              <td>
+                  <a th:href="@{'/projectprotect/'+${project.getId()}}">pobierz zabezpieczony</a>
+              </td>
+          </tr>
+          </tbody>
+      </table>
+  </th:block>
+
+
+
+  <th:block th:fragment="showProduct()" th:if="${code!=null}" th:class="show_product">
+  <form th:action="@{'/pdf_add'}" method="post" enctype="multipart/form-data">
+
+
+       <span>
+           <label>Kod produktu: <strong th:text="${code}"></strong> </label>
+           <input type="hidden" name="id" id="id" th:value="${id}"/>
+       </span>
+
+      <span>
+           <label>Architektura: </label>
+           <input type="file" name="A" id="A"  />
+       </span>
+
+      <span>
+           <label>Architektura okładka: </label>
+           <input type="file" name="AO" id="AO"/>
+       </span>
+
+      <span>
+           <label>Techniczny: </label>
+           <input type="file" name="T" id="T"/>
+       </span>
+
+      <span>
+           <label>Techniczny okładka: </label>
+           <input type="file" name="TO" id="TO"/>
+       </span>
+
+      <span>
+           <label>Koszty: </label>
+           <input type="file" name="C" id="C"/>
+       </span>
+
+      <span>
+           <label>Koszty okładka: </label>
+           <input type="file" name="CO" id="CO"/>
+       </span>
+
+      <input type="submit" value="zapisz" class="submit" />
+
+  </form>
+  </th:block>
+
+
+</body>
+</html>
+
+
+
+

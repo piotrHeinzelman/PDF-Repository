@@ -23,12 +23,6 @@ public class FileController {
     private String homepath = "c:/temp/"; //  "c:/Users/admin/Desktop/SYSTEM/"; // "P:/TMP/ph/PDF/SYSTEM/" ; //
 
 
-
-    @RequestMapping(value = {"/",""} , method = RequestMethod.GET )
-    public String indexGet ( Model model ){
-        return "index";
-    }
-
     @RequestMapping(value = {"/add"} , method = RequestMethod.GET )
     public String addFile ( Model model ){
         return "add";
