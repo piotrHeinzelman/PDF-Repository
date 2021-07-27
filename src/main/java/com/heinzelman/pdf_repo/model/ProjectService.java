@@ -3,6 +3,7 @@ package com.heinzelman.pdf_repo.model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -13,6 +14,16 @@ public class ProjectService implements ProjectRepo{
 
     public ProjectService(ProjectRepo projectRepo) {
         this.projectRepo = projectRepo;
+    }
+
+    @Override
+    public List<Project> findByNameContains(String s) {
+        return projectRepo.findByNameContains( s );
+    }
+
+    @Override
+    public Optional<Project> findByName( String name ) {
+        return projectRepo.findByName( name.trim().toUpperCase() );
     }
 
     @Override

@@ -17,6 +17,8 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
+
+    @Column(name = "name", unique = true)
     private String name;
 
     @OneToOne(cascade = CascadeType.ALL)

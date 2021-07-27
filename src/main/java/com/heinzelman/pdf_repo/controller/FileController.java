@@ -189,7 +189,8 @@ public ResponseEntity<byte[]> getPDF(@RequestBody String json) {
 
 
         JoinPDFs j = new JoinPDFs();
-        String joinName = j.join( homepath + code + "/" + code + "_" + "AL" + ".pdf"  , homepath + code + "/" + code + "_" + "A" + ".pdf"  );
+       // String joinName = j.join( homepath + code + "/" + code + "_" + "AL" + ".pdf"  , homepath + code + "/" + code + "_" + "A" + ".pdf"  );
+        String joinName = j.join( one , two );
 
 
         System.out.println(  joinName );

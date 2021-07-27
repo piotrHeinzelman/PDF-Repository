@@ -3,22 +3,29 @@ package com.heinzelman.pdf_repo.service;
 
 import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
+import org.springframework.beans.factory.annotation.Value;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class JoinPDFs {
 
-    public String join( String one, String two ) throws FileNotFoundException, IOException {
+        @Value("${targetfolder}")
+        private String folder;
 
-            File file1 = new File( one );
-            File file2 = new File( two );
+    public String join( File file1, File file2 ) throws FileNotFoundException, IOException {
+
+
+
+        //    File file1 = new File( one );
+        //    File file2 = new File( two );
 
             //Instantiating PDFMergerUtility class
             PDFMergerUtility PDFmerger = new PDFMergerUtility();
 
             //Setting the destination file
-            PDFmerger.setDestinationFileName( "c:\\temp\\out.pdf");
+            PDFmerger.setDestinationFileName( folder + "tmp.pdf");
 
             //adding the source files
             PDFmerger.addSource(file1);
