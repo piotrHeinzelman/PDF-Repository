@@ -1,34 +1,5 @@
 <html th:fragment="layout (template, menu)" xmlns:th="http://www.w3.org/1999/xhtml">
 <body>
-  <form>
-    <th:block th:fragment="input (label, name, type)">
-      <div th:with="valid=${!#fields.hasErrors(name)}"
-        th:class="${'form-group' + (valid ? '' : ' has-error')}"
-        class="form-group">
-        <label class="col-sm-2 control-label" th:text="${label}">Label</label>
-        <div class="col-sm-10">
-            <div th:switch="${type}">
-                <input th:case="'text'" class="form-control" type="text" th:field="*{__${name}__}" />
-                <input th:case="'date'" class="form-control" type="text" th:field="*{__${name}__}"
-                        placeholder="YYYY-MM-DD" title="Enter a date in this format: YYYY-MM-DD"
-                        pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))"/>
-            </div>
-          <span th:if="${valid}"
-            class="glyphicon glyphicon-ok form-control-feedback"
-            aria-hidden="true"></span>
-          <th:block th:if="${!valid}">
-            <span
-              class="glyphicon glyphicon-remove form-control-feedback"
-              aria-hidden="true"></span>
-            <span class="help-inline" th:errors="*{__${name}__}">Error</span>
-          </th:block>
-        </div>
-      </div>
-    </th:block>
-  </form>
-
-
-
 
 
 
@@ -73,48 +44,31 @@
 
 
 
-  <th:block th:fragment="showProduct()" th:if="${code!=null}" th:class="show_product">
-  <form th:action="@{'/pdf_add'}" method="post" enctype="multipart/form-data">
-
-
-       <span>
+  <th:block th:fragment="showProduct()" th:if="${code!=null}">
+      <form th:action="@{'/pdf_add'}" method="post" enctype="multipart/form-data">
+      <table>
+          <tbody>
+          <tr><td></td><td>
            <label>Kod produktu: <strong th:text="${code}"></strong> </label>
            <input type="hidden" name="id" id="id" th:value="${id}"/>
-       </span>
 
-      <span>
-           <label>Architektura: </label>
-           <input type="file" name="A" id="A"  />
-       </span>
+              <a th:if="${A!=null}" th:href="${'/'+id+'/1'+A}">[ pobierz ]</a>
+              <a th:href="${'/'+id+'/1'+A}">[ pobierz ]</a>
 
-      <span>
-           <label>Architektura okładka: </label>
-           <input type="file" name="AO" id="AO"/>
-       </span>
 
-      <span>
-           <label>Techniczny: </label>
-           <input type="file" name="T" id="T"/>
-       </span>
+              <th:block th:each="val : ${values}">
+                  <p th:text="${val.ordinal()}"></p>
+                  <p th:text="${val.name()}"></p>
+                  <p th:text="${val}"></p>
+                  <p th:text="${val.getDescription()}"></p>
+              </th:block>>
 
-      <span>
-           <label>Techniczny okładka: </label>
-           <input type="file" name="TO" id="TO"/>
-       </span>
+          <input type="submit" value="zapisz" class="submit" style="width: 100%; padding: 8px; margin: 12px;  "/>
 
-      <span>
-           <label>Koszty: </label>
-           <input type="file" name="C" id="C"/>
-       </span>
-
-      <span>
-           <label>Koszty okładka: </label>
-           <input type="file" name="CO" id="CO"/>
-       </span>
-
-      <input type="submit" value="zapisz" class="submit" />
-
-  </form>
+          </td></tr>
+          </tbody>
+      </table>
+      </form>
   </th:block>
 
 
@@ -124,3 +78,47 @@
 
 
 
+
+
+
+
+
+
+
+</td><tr></tr><td><a th_if="${A!=null}" th:href="${'/'+id+'/1'}">[ pobierz ]</a></td><td>
+
+    <label>Architektura: </label>
+</td><td>
+    <input type="file" name="A" id="A"  />
+
+</td><tr></tr><td><a th_if="${AO!=null}" th:href="${'/'+id+'/2'}">[ pobierz ]</a></td><td>
+
+    <label>Architektura okładka: </label>
+</td><td>
+    <input type="file" name="AO" id="AO"/>
+
+</td><tr></tr><td><a th_if="${T!=null}" th:href="${'/'+id+'/3'}">[ pobierz ]</a></td><td>
+
+    <label>Techniczny: </label>
+</td><td>
+    <input type="file" name="T" id="T"/>
+
+</td><tr></tr><td><a th_if="${TO!=null}" th:href="${'/'+id+'/4'}">[ pobierz ]</a></td><td>
+
+    <label>Techniczny okładka: </label>
+</td><td>
+    <input type="file" name="TO" id="TO"/>
+
+</td><tr></tr><td><a th_if="${C!=null}" th:href="${'/'+id+'/5'}">[ pobierz ]</a></td><td>
+
+    <label>Koszty: </label>
+</td><td>
+    <input type="file" name="C" id="C"/>
+
+</td><tr></tr><td><a th_if="${CO!=null}" th:href="${'/'+id+'/6'}">[ pobierz ]</a></td><td>
+
+    <label>Koszty okładka: </label>
+</td><td>
+    <input type="file" name="CO" id="CO"/>
+
+</td><tr></tr><td colspan="3">

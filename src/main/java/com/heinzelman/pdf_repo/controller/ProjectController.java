@@ -1,9 +1,6 @@
 package com.heinzelman.pdf_repo.controller;
 
-import com.heinzelman.pdf_repo.model.PDFName;
-import com.heinzelman.pdf_repo.model.PDFNameService;
-import com.heinzelman.pdf_repo.model.Project;
-import com.heinzelman.pdf_repo.model.ProjectService;
+import com.heinzelman.pdf_repo.model.*;
 import com.heinzelman.pdf_repo.service.JoinPDFs;
 import com.heinzelman.pdf_repo.service.Stamper;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -16,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.Folder;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,13 +49,11 @@ public class ProjectController {
 
     @PostMapping("/projectfind")
     public String listProject_POST(Model model , @RequestParam String code ){
-        if ( code==null )                                                      {  return "index" ; /*model.addAttribute("error","pusty kod");  return listProject(model); */ }
+        if ( code==null )                                                      {  return "index" ;  }
         code = code.trim().toUpperCase();
-        if ( code.equals(""))                                                  {  return "index" ; /*model.addAttribute("error","pusty kod");  return listProject(model); */ }
+        if ( code.equals(""))                                                  {  return "index" ;  }
 
         List<Project> projectList = projectService.findByNameContains( code );
-        //if ( projectList.size()==0 ) { model.addAttribute( "code", code );  return "index" ; /*model.addAttribute("error","nie ma takiego kodu");  return listProject(model); } */ }
-        //System.out.println( projectList );
         model.addAttribute( "projectList", projectList );
 
         return "index";
@@ -68,9 +64,9 @@ public class ProjectController {
     @PostMapping("/projectadd")
     public String addProject(Model model , @RequestParam String code ){
 
-        if ( code==null )                                                      { return "index" ; /*model.addAttribute("error","pusty kod");  return listProject(model);*/ }
+        if ( code==null )                                                      { return "index" ; }
         code = code.trim().toUpperCase();
-        if ( code.equals(""))                                                  {  return "index" ; /*model.addAttribute("error","pusty kod");  return listProject(model);*/ }
+        if ( code.equals(""))                                                  { return "index" ; }
 
         Project newProject = projectService.findByName( code ).orElse( new Project( code ) );
 
@@ -96,12 +92,11 @@ public class ProjectController {
 
         String code = project.getName(); model.addAttribute("code",code);
                                          model.addAttribute("id",project.getId());
-        /*if ( project.getA()!=null)*/ model.addAttribute("A",project.getA());
-        /*if ( project.getA()!=null)*/ model.addAttribute("AO",project.getAO());
-        /*if ( project.getA()!=null)*/ model.addAttribute("T",project.getT());
-        /*if ( project.getA()!=null)*/ model.addAttribute("TO",project.getTO());
-        /*if ( project.getA()!=null)*/ model.addAttribute("C",project.getC());
-        /*if ( project.getA()!=null)*/ model.addAttribute("CO",project.getCO());
+                                         model.addAttribute("values", PdfType.values() );
+         for ( PdfType type : PdfType.values() ) {
+             model.addAttribute(  type.name() , project.getPdfs().get( type )  );
+             System.out.println( type.name() + " : " + project.getPdfs().get( type ) );
+         }
 
         return "index";
     }
@@ -181,17 +176,17 @@ public class ProjectController {
 
         String code = project.getName(); model.addAttribute("code",code);
 
-
+/*
         File productDirOne = new File(  folder + "0" + ( project.getA().getId()/100)  );
         System.out.println( productDirOne );
-        if (!productDirOne.exists()){ return null/*"project_list"*/; }
+        if (!productDirOne.exists()){ return null ; }
 
         File one = new File(  productDirOne + "/" + project.getA().getId() + ".pdf"  );
         System.out.println(one);
-        if (!one.exists()){ return null/*"project_list"*/; }
+        if (!one.exists()){ return null ; }
 
-        File productDirTwo = new File(  folder + "0" + ( project.getAO().getId()/100)  ); if (!productDirTwo.exists()){ return null/*"project_list"*/; }
-        File two = new File(  productDirTwo + "/" + project.getAO().getId() + ".pdf"  ); if (!two.exists()){ return null/*"project_list"*/; }
+        File productDirTwo = new File(  folder + "0" + ( project.getAO().getId()/100)  ); if (!productDirTwo.exists()){ return null ; }
+        File two = new File(  productDirTwo + "/" + project.getAO().getId() + ".pdf"  ); if (!two.exists()){ return null ; }
 
 
         JoinPDFs j = new JoinPDFs();
@@ -202,7 +197,7 @@ public class ProjectController {
 
         Stamper s = new Stamper();
         s.stamp(  joinName ,  " * napis * " , " strasznieTrudneHasl0" );
-
+*/
 
         return new FileSystemResource( new File ( folder + "tmp_stamp.pdf" ) );
 
@@ -236,7 +231,25 @@ public class ProjectController {
     }
 
 
+    public String getFileNameById(  Long id , String type ){
 
+        String prefix = "0" + ( Long )( id / 10 );
+        String name = "";
+        switch ( type ) {
+            case "A": name = "1"; break;
+            case "AO": name = "2"; break;
+            case "T": name = "3"; break;
+            case "TO": name = "4"; break;
+            case "C": name = "5"; break;
+            case "CO": name = "6"; break;
+        }
+
+        String out = folder + "/" + prefix;
+        File f = new File(out);
+        if ( ! f.exists() ) f.mkdir();
+
+        return prefix + "/" + id + "" + name + ".pdf";
+    }
 
 }
 

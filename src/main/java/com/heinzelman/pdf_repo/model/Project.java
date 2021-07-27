@@ -3,9 +3,10 @@ package com.heinzelman.pdf_repo.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.mapping.Set;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Getter
@@ -21,6 +22,11 @@ public class Project {
     @Column(name = "name", unique = true)
     private String name;
 
+    @Column(name = "pdfs")
+    @ManyToMany
+    private Map<PdfType, PDFName> pdfs = new HashMap<>();
+
+    /*
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "a_id", referencedColumnName = "id")
     private PDFName A;  // Arch
@@ -45,6 +51,8 @@ public class Project {
     @JoinColumn(name = "co_id", referencedColumnName = "id")
     private PDFName CO; // Calculation cOver
 
+    */
+
     public Project() {}
 
     public Project( String name ) {
@@ -60,12 +68,6 @@ public class Project {
         return "Project{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", A=" + A +
-                ", AO=" + AO +
-                ", T=" + T +
-                ", TO=" + TO +
-                ", C=" + C +
-                ", CO=" + CO +
                 '}';
     }
 
@@ -82,4 +84,9 @@ public class Project {
         return Objects.hash(id);
     }
 
+
+
+
 }
+
+
