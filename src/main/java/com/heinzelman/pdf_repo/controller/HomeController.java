@@ -9,8 +9,8 @@ public class HomeController {
 
     @GetMapping({"/","","/index","index"})
     public String homeController( Model model){
-        model.addAttribute("error","Error !");
-        model.addAttribute("success","Success !");
+        //model.addAttribute("error","Error !");
+        //model.addAttribute("success","Success !");
         return "index";
     }
 

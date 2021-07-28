@@ -10,11 +10,12 @@ import org.springframework.web.multipart.MultipartFile;
 @Setter
 public class FilesForm {
 
-    private String code;
-    private MultipartFile pdfA;
-    private MultipartFile pdfAL;
-    private MultipartFile pdfB;
-    private MultipartFile pdfBL;
-
+    private Long id;
+    private MultipartFile A;
+    private MultipartFile AO;
+    private MultipartFile T;
+    private MultipartFile TO;
+    private MultipartFile C;
+    private MultipartFile CO;
 
 }

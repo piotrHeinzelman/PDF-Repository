@@ -1,9 +1,8 @@
 package com.heinzelman.pdf_repo.model;
 
-
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.mapping.Set;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.*;
@@ -11,6 +10,7 @@ import java.util.*;
 @Entity
 @Getter
 @Setter
+@ToString
 @Table(name = "projects")
 public class Project {
 
@@ -23,7 +23,7 @@ public class Project {
     private String name;
 
     @Column(name = "pdfs")
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private Map<PdfType, PDFName> pdfs = new HashMap<>();
 
     public Project() {}
@@ -36,7 +36,25 @@ public class Project {
         this.name = name.trim().toUpperCase();
     }
 
+    public String getName() {
+        return name;
+    }
 
+    public Long getId() {
+        return id;
+    }
+
+    public Map<PdfType, PDFName> getPdfs() {
+        return pdfs;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setPdfs(Map<PdfType, PDFName> pdfs) {
+        this.pdfs = pdfs;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -31,8 +31,8 @@ public class FileController {
     @RequestMapping(value = {"/add"} , method = RequestMethod.POST )
     public String addFile ( Model model, FilesForm form ) throws IOException {
 
-        if ( form.getCode()==null || form.getCode().trim().toUpperCase().equals("")) { model.addAttribute("error_" , " *** brak kodu *** " ) ; return  addFile ( model ); }
-
+        if ( form.getId()==null ) { model.addAttribute("error_" , " *** brak kodu *** " ) ; return  addFile ( model ); }
+/*
         String code = form.getCode();
         if ( form.getPdfA()!= null && !form.getPdfA().isEmpty()) { saveFile (  code , form.getPdfA(), "A" , model); }
         if ( form.getPdfAL()!= null && !form.getPdfAL().isEmpty()) { saveFile (  code , form.getPdfAL(), "AL" , model ); }
@@ -78,11 +78,11 @@ public class FileController {
 
     @RequestMapping(value = {"/list"} , method = RequestMethod.POST )
     public String listFile_POST ( Model model, FilesForm form ) throws IOException {
-
+        /*
         if ( form.getCode()==null || form.getCode().trim().toUpperCase().equals("")) { model.addAttribute("error" , " *** brak kodu *** " ) ; return  listFile ( model ); }
         String code = form.getCode();
 
-        File productDir = new File(  homepath + code  ); if (!productDir.exists()){ /* model.addAttribute("error" , " *** brak kodu *** " ) ; */ return  listFile ( model ); }
+        File productDir = new File(  homepath + code  ); if (!productDir.exists()){  return  listFile ( model ); }
 
         model.addAttribute("fileList" , productDir.list());
         model.addAttribute("code" , code );

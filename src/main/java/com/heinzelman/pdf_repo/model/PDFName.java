@@ -35,4 +35,37 @@ public class PDFName {
         return Objects.hash(id);
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getOldFileName() {
+        return oldFileName;
+    }
+
+    public void setOldFileName(String oldFileName) {
+        this.oldFileName = oldFileName;
+    }
+
+    public Long getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(Long serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+
+    @Override
+    public String toString() {
+        return "PDFName{" +
+                "id=" + id +
+                ", oldFileName='" + oldFileName + '\'' +
+                ", serialNumber=" + serialNumber +
+                '}';
+    }
 }

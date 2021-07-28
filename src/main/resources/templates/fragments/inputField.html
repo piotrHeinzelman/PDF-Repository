@@ -3,74 +3,116 @@
 
 
 
-  <th:block th:fragment="addCode()">
-      <form th:action="@{'/projectadd'}" method="post" enctype="multipart/form-data">
-          <label>dodaj projekt: (kod)</label>
-          <input type="text" name="code" id="code"/>
-          <input type="submit" value="dodaj" class="submit" />
-      </form>
-  </th:block>
+<table>
+<tbody>
+
+<th:block th:fragment="findCode()">
+<tr >
+<form th:action="@{'/projectfind'}" method="post" enctype="multipart/form-data" id="form_projectfind">
+    <td></td>
+    <td>
+
+        <label>szukaj projektu:</label>
+
+    </td><td>
+
+        <input type="text" name="code" id="code"/>
+
+    </td><td>
+
+        <input type="submit" value="szukaj" class="submit" />
+
+    </td>
+    <td></td>
+</form>
+</tr>
 
 
-  <th:block th:fragment="findCode()">
-      <form th:action="@{'/projectfind'}" method="post" enctype="multipart/form-data">
-          <label>szukaj projektu:</label>
-          <input type="text" name="code" id="code"/>
-          <input type="submit" value="szukaj" class="submit" />
-      </form>
-  </th:block>
+<tr>
+    <td></td>
+    <td></td>
+    <td colspan="2">
+        <span th:if="${new_code!=null}" onclick="addcode();" class="addcode">dodaj kod: <span id="old_code" th:text="${new_code}"></span></span>
+
+    </td>
+    <td></td>
+</tr>
+</th:block>
+
+
+</tbody>
+</table>
 
 
 
+
+<span>lista projektów o kodzie %?%</span>
+<table>
+    <tbody>
 
   <th:block th:fragment="listCode()" th:if="${not #lists.isEmpty(projectList)}">
-      <span>lista projektów o kodzie %?%</span>
-      <table>
-          <tbody>
-          <tr th:each="project : ${projectList}">
-              <td>
-                  <a th:href="@{'/project/'+${project.getId()}}" th:text="${project.getName()}"></a>
+
+          <tr th:each="proj : ${projectList}" class="listcode">
+              <td></td>
+              <td colspan="3" th:onclick="'show('+${proj.getId()}+');'">
+                  <a th:text="${proj.getName()}"></a>
               </td>
-              <td>
-                  <a th:href="@{'/projectmont/'+${project.getId()}}">pobierz zmontowany</a>
-              </td>
-              <td>
-                  <a th:href="@{'/projectprotect/'+${project.getId()}}">pobierz zabezpieczony</a>
-              </td>
+              <td></td>
           </tr>
-          </tbody>
-      </table>
+
   </th:block>
+    </tbody>
+</table>
 
 
+
+<table>
+    <tbody>
 
   <th:block th:fragment="showProduct()" th:if="${code!=null}">
-      <form th:action="@{'/pdf_add'}" method="post" enctype="multipart/form-data">
-      <table>
-          <tbody>
-          <tr><td></td><td>
-           <label>Kod produktu: <strong th:text="${code}"></strong> </label>
-           <input type="hidden" name="id" id="id" th:value="${id}"/>
+      <form th:action="@{'/pdf/add'}" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="id" id="id" th:value="${id}"/>
 
-              <a th:if="${A!=null}" th:href="${'/'+id+'/1'+A}">[ pobierz ]</a>
-              <a th:href="${'/'+id+'/1'+A}">[ pobierz ]</a>
+          <!--  code name  -->
+         <tr><td colspan="5" ><h2 th:text="${code}" style="text-align: center;"></h2></td></tr>
 
+         <!-- loop for inputs -->
+         <th:block th:each="PdfType : ${PdfTypes}">
+         <tr>
+             <td></td>
+             <td><th:block th:if="${#maps.containsKey(validFiles, PdfType)}"><a th:href="${'/pdf/get/'+id+'/'+PdfType+''}">[ download ]</a></th:block></td>
+             <td th:text="${PdfType.getDescription()}"></td>
+             <td><input type="file" th:name="${PdfType.name()}" th:id="${PdfType.name()}"/></td>
+             <td></td>
+         </tr>
+         </th:block>
 
-              <th:block th:each="val : ${values}">
-                  <p th:text="${val.ordinal()}"></p>
-                  <p th:text="${val.name()}"></p>
-                  <p th:text="${val}"></p>
-                  <p th:text="${val.getDescription()}"></p>
-              </th:block>>
+         <tr>
+             <td colspan="5">
+                 <input type="submit" value="zapisz" class="submit" />
+             </td>
+         </tr>
 
-          <input type="submit" value="zapisz" class="submit" style="width: 100%; padding: 8px; margin: 12px;  "/>
+         <tr>
+            <td colspan="5">...</td>
+         </tr>
 
-          </td></tr>
-          </tbody>
-      </table>
+          <tr>
+              <td colspan="5">
+             <p>pobierz do druku:  [ OKLADKI Color ]  [ Srodki B/W ] </p>
+             <p> podaj treść znaku wodnego  [ ... ] </p>
+
+             <p></p>
+             <p>pobierz połączone i podpisane pliki:</p>
+             <p>[ Arch ] , [ Tech ] , [ SK ] </p>
+
+              </td>
+          </tr>
       </form>
   </th:block>
 
+    </tbody>
+</table>
 
 </body>
 </html>

@@ -9,28 +9,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <script th:src="@{/js/script.js}"></script>
   </head>
 
 
 
 
 <body>
-    <div id="top">
-       &nbsp;
-    </div>
-
-    <div id="status">
-        <h2 th:if="${error!=null}" class="error" th:text="${error}"></h2>
-        <h2 th:if="${success!=null}" class="success" th:text="${success}"></h2>
-    </div>
+    <h2 th:if="${error!=null}" class="error" th:text="${error}"></h2>
+    <h2 th:if="${success!=null}" class="success" th:text="${success}"></h2>
 
     <div id="content">
          <th:block th:include="${template}"/>
     </div>
 
-    <div id="foot">
-       &nbsp;
-    </div>
+
 
 </body>
 
