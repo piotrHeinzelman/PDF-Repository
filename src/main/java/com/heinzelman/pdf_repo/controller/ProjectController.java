@@ -39,6 +39,7 @@ public class ProjectController {
     private String folder;
 
 
+
     @PostMapping("/projectfind")
     public String listProject_POST(Model model, @RequestParam String code) {
         if (code == null || code.trim().toUpperCase().equals("")) {
@@ -55,7 +56,6 @@ public class ProjectController {
         return "index";
     }
 
-
     private boolean hasEqualCode(List<Project> projectList, String code) {
         if (projectList.isEmpty()) return false;
         code = code.trim().toUpperCase();
@@ -66,12 +66,11 @@ public class ProjectController {
     }
 
 
+
     @PostMapping("/projectadd")
     public String addProject(Model model, @RequestParam String code) {
 
-        if (code == null || code.trim().toUpperCase().equals("")) {
-            return "index";
-        }
+        if (code == null || code.trim().toUpperCase().equals("")) { return "index"; }
         code = code.trim().toUpperCase();
 
         Project newProject = projectService.findByName(code).orElse(new Project(code));
@@ -80,12 +79,12 @@ public class ProjectController {
         return "index";
     }
 
-// ***************
+
 
     @GetMapping("/project/{id}")
     public String listProject_POST(Model model, @PathVariable Long id) {
         try {
-            if (id == null) throw new Exception("invalid Id value.");
+            if ( id == null ) throw new Exception("invalid Id value.");
 
             Optional<Project> reply = projectService.findById(id);
             if (reply.isEmpty()) return "index";
@@ -96,10 +95,9 @@ public class ProjectController {
             model.addAttribute("id", project.getId());
             model.addAttribute("PdfTypes", PdfType.values());
 
-            for (PdfType type : PdfType.values()) {
+            for ( PdfType type : PdfType.values()) {
                 model.addAttribute(type.name(), project.getPdfs().get(type));
             }
-
 
             Map<PdfType, String> validFiles = new HashMap<>();
             Map<PdfType, PDFName> pdfs = project.getPdfs();
@@ -142,6 +140,94 @@ public class ProjectController {
         }
         return listProject_POST( model, id );
     }
+
+
+
+
+    @GetMapping(value = "/pdf/get/{id}/{pdfType}", produces = {"application/pdf"})
+    @ResponseBody
+    public FileSystemResource pdfDownload_GET( Model model, @PathVariable Long id, @PathVariable PdfType pdfType ) throws IOException {
+        if (id == null) throw new IOException ("invalid Id");
+         String fileFullName = null;
+
+
+        Optional<Project> reply = projectService.findById(id);
+        if (reply.isEmpty())  throw new IOException("invalid Id");
+
+        Project project = reply.get();
+        Map<PdfType, PDFName> pdfs = project.getPdfs();
+
+        fileFullName = getFileNameById( id, pdfType );
+        return new FileSystemResource( new File( fileFullName ));
+    }
+
+
+
+// ***************
+
+
+    @GetMapping(value = "/pdf/getEN/{id}/{type}", produces = {"application/pdf"})
+    @ResponseBody
+    public FileSystemResource pdfEnDownload_GET( Model model, @PathVariable Long id, @PathVariable String type ) throws IOException {
+        if (id == null) throw new IOException ("invalid Id");
+        String fileFullName = null;
+
+        Optional<Project> reply = projectService.findById(id);
+        if (reply.isEmpty())  throw new IOException("invalid Id");
+
+        Project project = reply.get();
+        Map<PdfType, PDFName> pdfs = project.getPdfs();
+
+        switch ( type ){
+            case "BW": fileFullName = prepareBW( id , false ); break;
+            case "COLOR": fileFullName = prepareColor( id , false );  break;
+            case "ARCH": fileFullName = prepareArch( id , false ); break;
+            case "TECH": fileFullName = prepareTech( id , false ); break;
+            case "CENNIK": fileFullName = prepareCennik( id , false ); break;
+
+            case "EnBW": fileFullName = prepareBW( id , true ); break;
+            case "EnCOLOR": fileFullName = prepareColor( id , true );  break;
+            case "EnARCH": fileFullName = prepareArch( id , true ); break;
+            case "EnTECH": fileFullName = prepareTech( id , true ); break;
+            case "EnCENNIK": fileFullName = prepareCennik( id , true ); break;
+        }
+        return new FileSystemResource( new File( fileFullName ));
+    }
+
+
+
+
+
+
+
+    private String  prepareBW( Long id , boolean encrypt ) {
+        return  joinArrayOfPDF(   new String[]{  getFileNameById( id , PdfType.A ) , getFileNameById( id , PdfType.T ) , getFileNameById( id , PdfType.C )   } , encrypt );
+    }
+    private String  prepareColor( Long id , boolean encrypt) {
+        return  joinArrayOfPDF(   new String[]{  getFileNameById( id , PdfType.AO ) , getFileNameById( id , PdfType.TO ) , getFileNameById( id , PdfType.CO )   } , encrypt );
+    }
+    private String  prepareArch( Long id , boolean encrypt) {
+        return  joinArrayOfPDF(   new String[]{  getFileNameById( id , PdfType.A ) , getFileNameById( id , PdfType.AO ) } , encrypt );
+    }
+    private String  prepareTech( Long id , boolean encrypt) {
+        return  joinArrayOfPDF(   new String[]{  getFileNameById( id , PdfType.T ) , getFileNameById( id , PdfType.TO ) } , encrypt );
+    }
+    private String  prepareCennik( Long id , boolean encrypt ) {
+        return  joinArrayOfPDF(   new String[]{  getFileNameById( id , PdfType.C ) , getFileNameById( id , PdfType.CO ) } , encrypt );
+    }
+
+
+    private String joinArrayOfPDF(  String[] files , boolean encrypt ){
+        System.out.println( files );
+        System.out.println( "Encrypt: " + encrypt );
+
+        return "?";
+    }
+
+
+
+
+
 
 
 
@@ -220,7 +306,5 @@ public class ProjectController {
         return  file.getOriginalFilename() ;
     }
 }
-
-
 
 

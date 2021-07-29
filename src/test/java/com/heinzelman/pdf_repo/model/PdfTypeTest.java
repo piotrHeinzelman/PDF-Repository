@@ -2,6 +2,8 @@ package com.heinzelman.pdf_repo.model;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PdfTypeTest {
@@ -20,6 +22,11 @@ class PdfTypeTest {
         PdfType y = PdfType.valueOf("A");
         System.out.println( x.name() );
         System.out.println( x.getDescription() );
+
+
+
+        if(Set.of( PdfType.values()).contains("XX") );
+
     }
 
     @Test

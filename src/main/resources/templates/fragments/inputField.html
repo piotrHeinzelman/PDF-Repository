@@ -99,12 +99,22 @@
 
           <tr>
               <td colspan="5">
-             <p>pobierz do druku:  [ OKLADKI Color ]  [ Srodki B/W ] </p>
+                  <p>pobierz do druku:  <a th:href="@{'/pdf/getEN/'+${id}+'/BW'}">[ OKLADKI Color ]</a>  <a th:href="@{'/pdf/getEN/'+${id}+'/COLOR'}">[ Srodki B/W ]</a> </p>
              <p> podaj treść znaku wodnego  [ ... ] </p>
 
              <p></p>
              <p>pobierz połączone i podpisane pliki:</p>
-             <p>[ Arch ] , [ Tech ] , [ SK ] </p>
+             <p>
+                 <a th:href="@{'/pdf/getEN/'+${id}+'/ARCH'}">[ Arch ]</a>
+                 <a th:href="@{'/pdf/getEN/'+${id}+'/TECH'}">[ Tech ]</a>
+                 <a th:href="@{'/pdf/getEN/'+${id}+'/CENNIK'}">[ SK ]</a>
+                  <p>
+                      case "EnBW": fileFullName = prepareBW( id , true ); break;
+                      case "EnCOLOR": fileFullName = prepareColor( id , true );  break;
+                      case "EnARCH": fileFullName = prepareArch( id , true ); break;
+                      case "EnTECH": fileFullName = prepareTech( id , true ); break;
+                      case "EnCENNIK": fileFullName = prepareCennik( id , true ); break;
+                  </p>
 
               </td>
           </tr>
