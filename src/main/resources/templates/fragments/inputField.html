@@ -70,6 +70,7 @@
     <tbody>
 
   <th:block th:fragment="showProduct()" th:if="${code!=null}">
+
       <form th:action="@{'/pdf/add'}" method="post" enctype="multipart/form-data">
       <input type="hidden" name="id" id="id" th:value="${id}"/>
 
@@ -80,7 +81,7 @@
          <th:block th:each="PdfType : ${PdfTypes}">
          <tr>
              <td></td>
-             <td><th:block th:if="${#maps.containsKey(validFiles, PdfType)}"><a th:href="${'/pdf/get/'+id+'/'+PdfType+''}">[ download ]</a></th:block></td>
+             <td><th:block th:if="${#maps.containsKey(validFiles, PdfType)}"><a th:href="${'/pdf/get/'+id+'/'+PdfType+'/'+code+'_'+PdfType}">[ download ]</a></th:block></td>
              <td th:text="${PdfType.getDescription()}"></td>
              <td><input type="file" th:name="${PdfType.name()}" th:id="${PdfType.name()}"/></td>
              <td></td>
@@ -89,34 +90,53 @@
 
          <tr>
              <td colspan="5">
-                 <input type="submit" value="zapisz" class="submit" />
+                 <input type="submit" value="zapisz" class="submit" style="padding: 10px 42px; display: block; margin-left: 30%; width: 40%;  margin-top: 30px; "/>
              </td>
          </tr>
 
          <tr>
-            <td colspan="5">...</td>
+            <td colspan="5"><br/><hr/><br/></td>
          </tr>
 
           <tr>
+              <td></td>
+              <td>pobierz do druku:</td>
+              <td> <a th:href="@{'/pdf/getEN/'+${id}+'/COLOR/'+${code}+'_okladki'}">[ OKLADKI Color ]</a> </td>
+              <td> <a th:href="@{'/pdf/getEN/'+${id}+'/BW/'+${code}+'_srodki'}">[ Srodki B/W ]</a> </td>
+              <td></td>
+          </tr>
+
+          <tr>
+              <td colspan="5"><br/><hr/><br/></td>
+          </tr>
+
+          <tr>
+              <td></td>
+              <td>pobierz połaczone:</td>
+              <td> <a th:href="@{'/pdf/getEN/'+${id}+'/ARCH/'+${code}+'_Arch'}">[ Arch ]</a> </td>
+              <td> <a th:href="@{'/pdf/getEN/'+${id}+'/TECH/'+${code}+'_Tech'}">[ Tech ]</a> </td>
+              <td> <a th:href="@{'/pdf/getEN/'+${id}+'/CENNIK/'+${code}+'_SK'}">[ SK ]</a> </td>
+          </tr>
+
+
+          <tr>
               <td colspan="5">
-                  <p>pobierz do druku:  <a th:href="@{'/pdf/getEN/'+${id}+'/BW'}">[ OKLADKI Color ]</a>  <a th:href="@{'/pdf/getEN/'+${id}+'/COLOR'}">[ Srodki B/W ]</a> </p>
-             <p> podaj treść znaku wodnego  [ ... ] </p>
-
-             <p></p>
-             <p>pobierz połączone i podpisane pliki:</p>
-             <p>
-                 <a th:href="@{'/pdf/getEN/'+${id}+'/ARCH'}">[ Arch ]</a>
-                 <a th:href="@{'/pdf/getEN/'+${id}+'/TECH'}">[ Tech ]</a>
-                 <a th:href="@{'/pdf/getEN/'+${id}+'/CENNIK'}">[ SK ]</a>
-                  <p>
-                      case "EnBW": fileFullName = prepareBW( id , true ); break;
-                      case "EnCOLOR": fileFullName = prepareColor( id , true );  break;
-                      case "EnARCH": fileFullName = prepareArch( id , true ); break;
-                      case "EnTECH": fileFullName = prepareTech( id , true ); break;
-                      case "EnCENNIK": fileFullName = prepareCennik( id , true ); break;
-                  </p>
-
+               podaj treść znaku wodnego  [ ... ]
               </td>
+          </tr>
+
+          <tr>
+              <td colspan="5">
+             pobierz połączone i podpisane pliki:
+              </td>
+          </tr>
+
+          <tr>
+              <td></td>
+              <td> <a th:href="@{'/pdf/getEN/'+${id}+'/EnARCH/'+${code}+'_ZnArch'}">[ Arch ] + Znak Wodny</a> </td>
+              <td> <a th:href="@{'/pdf/getEN/'+${id}+'/EnTECH/'+${code}+'_ZnTech'}">[ Tech ] + Znak Wodny</a> </td>
+              <td> <a th:href="@{'/pdf/getEN/'+${id}+'/EnCENNIK/'+${code}+'_ZnSK'}">[ SK ] + Znak Wodny</a> </td>
+            <td></td>
           </tr>
       </form>
   </th:block>
@@ -127,50 +147,3 @@
 </body>
 </html>
 
-
-
-
-
-
-
-
-
-
-
-</td><tr></tr><td><a th_if="${A!=null}" th:href="${'/'+id+'/1'}">[ pobierz ]</a></td><td>
-
-    <label>Architektura: </label>
-</td><td>
-    <input type="file" name="A" id="A"  />
-
-</td><tr></tr><td><a th_if="${AO!=null}" th:href="${'/'+id+'/2'}">[ pobierz ]</a></td><td>
-
-    <label>Architektura okładka: </label>
-</td><td>
-    <input type="file" name="AO" id="AO"/>
-
-</td><tr></tr><td><a th_if="${T!=null}" th:href="${'/'+id+'/3'}">[ pobierz ]</a></td><td>
-
-    <label>Techniczny: </label>
-</td><td>
-    <input type="file" name="T" id="T"/>
-
-</td><tr></tr><td><a th_if="${TO!=null}" th:href="${'/'+id+'/4'}">[ pobierz ]</a></td><td>
-
-    <label>Techniczny okładka: </label>
-</td><td>
-    <input type="file" name="TO" id="TO"/>
-
-</td><tr></tr><td><a th_if="${C!=null}" th:href="${'/'+id+'/5'}">[ pobierz ]</a></td><td>
-
-    <label>Koszty: </label>
-</td><td>
-    <input type="file" name="C" id="C"/>
-
-</td><tr></tr><td><a th_if="${CO!=null}" th:href="${'/'+id+'/6'}">[ pobierz ]</a></td><td>
-
-    <label>Koszty okładka: </label>
-</td><td>
-    <input type="file" name="CO" id="CO"/>
-
-</td><tr></tr><td colspan="3">

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -71,4 +72,17 @@ class ProjectServiceTest {
         System.out.println( projectController.getFileNameById( 11L , PdfType.T ));
         System.out.println( projectController.getFileNameById( 10L , PdfType.C ));
     }
+
+    @Test
+    void joinArrayOfPDF_test() {
+
+        @Value("${targetfolder}")
+        private String folder;
+
+        String reply = projectController.joinArrayOfPDF( new String[]{ "C:\\Users\\pheinzelman\\Desktop\\ok.pdf" , "C:\\Users\\pheinzelman\\Desktop\\sro.pdf"} , false );
+            System.out.println( reply );
+    }
+
+
+
 }

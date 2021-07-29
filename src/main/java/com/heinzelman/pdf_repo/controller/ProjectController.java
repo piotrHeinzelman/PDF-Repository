@@ -9,6 +9,8 @@ import org.bouncycastle.math.raw.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -144,12 +146,11 @@ public class ProjectController {
 
 
 
-    @GetMapping(value = "/pdf/get/{id}/{pdfType}", produces = {"application/pdf"})
+    @GetMapping(value = "/pdf/get/{id}/{pdfType}/*", produces = {"application/pdf"} )
     @ResponseBody
-    public FileSystemResource pdfDownload_GET( Model model, @PathVariable Long id, @PathVariable PdfType pdfType ) throws IOException {
+    public FileSystemResource pdfDownload_GET( Model model, @PathVariable Long id, @PathVariable PdfType pdfType  ) throws IOException {
         if (id == null) throw new IOException ("invalid Id");
          String fileFullName = null;
-
 
         Optional<Project> reply = projectService.findById(id);
         if (reply.isEmpty())  throw new IOException("invalid Id");
@@ -158,7 +159,9 @@ public class ProjectController {
         Map<PdfType, PDFName> pdfs = project.getPdfs();
 
         fileFullName = getFileNameById( id, pdfType );
-        return new FileSystemResource( new File( fileFullName ));
+
+        FileSystemResource outSystemResource = new  FileSystemResource( new File( fileFullName ));
+        return outSystemResource;
     }
 
 
@@ -166,7 +169,7 @@ public class ProjectController {
 // ***************
 
 
-    @GetMapping(value = "/pdf/getEN/{id}/{type}", produces = {"application/pdf"})
+    @GetMapping(value = "/pdf/getEN/{id}/{type}/*", produces = {"application/pdf"})
     @ResponseBody
     public FileSystemResource pdfEnDownload_GET( Model model, @PathVariable Long id, @PathVariable String type ) throws IOException {
         if (id == null) throw new IOException ("invalid Id");
@@ -207,23 +210,36 @@ public class ProjectController {
         return  joinArrayOfPDF(   new String[]{  getFileNameById( id , PdfType.AO ) , getFileNameById( id , PdfType.TO ) , getFileNameById( id , PdfType.CO )   } , encrypt );
     }
     private String  prepareArch( Long id , boolean encrypt) {
-        return  joinArrayOfPDF(   new String[]{  getFileNameById( id , PdfType.A ) , getFileNameById( id , PdfType.AO ) } , encrypt );
+        return  joinArrayOfPDF(   new String[]{  getFileNameById( id , PdfType.AO ) , getFileNameById( id , PdfType.A ) } , encrypt );
     }
     private String  prepareTech( Long id , boolean encrypt) {
-        return  joinArrayOfPDF(   new String[]{  getFileNameById( id , PdfType.T ) , getFileNameById( id , PdfType.TO ) } , encrypt );
+        return  joinArrayOfPDF(   new String[]{  getFileNameById( id , PdfType.TO ) , getFileNameById( id , PdfType.T ) } , encrypt );
     }
     private String  prepareCennik( Long id , boolean encrypt ) {
-        return  joinArrayOfPDF(   new String[]{  getFileNameById( id , PdfType.C ) , getFileNameById( id , PdfType.CO ) } , encrypt );
+        return  joinArrayOfPDF(   new String[]{  getFileNameById( id , PdfType.CO ) , getFileNameById( id , PdfType.C ) } , encrypt );
     }
 
 
-    private String joinArrayOfPDF(  String[] files , boolean encrypt ){
-        System.out.println( files );
-        System.out.println( "Encrypt: " + encrypt );
+    public String joinArrayOfPDF(  String[] files , boolean encrypt ) {
+        try {
+            // prepare output file
+            Random gen =  new Random();
+            File outputFile = new File(folder + "/join" + gen.nextInt(99) + ".pdf");
+            //outputFile.createNewFile();
 
-        return "?";
+            JoinPDFs j = new JoinPDFs();
+            j.joinArray(  files , outputFile );
+
+            if ( encrypt ) {
+                Stamper s = new Stamper();
+                s.stamp(  outputFile.getPath().toString() ,  " * napis * " , " strasznieTrudneHasl0" );
+                return outputFile.getPath().toString().replace(".pdf","en.pdf");
+            }
+
+            return outputFile.getPath().toString();
+        } catch( Exception ex ) { System.out.println( ex );return null; }
+
     }
-
 
 
 
@@ -246,6 +262,7 @@ public class ProjectController {
 
         String code = project.getName();
         model.addAttribute("code", code);
+
 
 /*
         File productDirOne = new File(  folder + "0" + ( project.getA().getId()/100)  );
@@ -276,8 +293,19 @@ public class ProjectController {
     }
 
 
-    // **** TECH
 
+
+
+
+
+
+
+    // ***********************************
+    // **
+    // **            TECH
+    // **
+    // **
+    // ***********************************
 
     public String getFileNameById(Long id, PdfType type) {
         String prefix = "0" + (Long) (id / 10);
@@ -300,11 +328,12 @@ public class ProjectController {
         } catch (Exception ex) {
             model.addAttribute("error", model.getAttribute("error") + "\n" + ex);  return null;
         }
-
-        String su =  model.getAttribute( "success" ) + "\nloaded file " + file.getOriginalFilename() + " / " + file.getName();
+        String su = model.getAttribute( "success" )==null ? "" : model.getAttribute( "success" ).toString();
+               su += "\nloaded file " + file.getOriginalFilename() + " / " + file.getName();
         model.addAttribute("success", su );
         return  file.getOriginalFilename() ;
     }
+
 }
 
 

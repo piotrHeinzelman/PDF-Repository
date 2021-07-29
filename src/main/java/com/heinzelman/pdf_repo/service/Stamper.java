@@ -12,7 +12,7 @@ public class Stamper {
 
         try {
             String FilenameIn = path;
-            String FilenameOut = "c:\\temp\\out_stamp.pdf";
+            String FilenameOut = path.replace(".pdf","en.pdf"); //"c:\\temp\\out_stamp.pdf";
 
 
 
@@ -70,8 +70,10 @@ public class Stamper {
 
             //Close the pdfStamper.
             pdfStamper.close();
-
-            System.out.println("PDF modified successfully.");
+            /*
+            File f = new File ( path.replace(".pdf","en.pdf"));
+            f.renameTo( new File ( path ));
+            */
         } catch (Exception e) {
             e.printStackTrace();
         }
