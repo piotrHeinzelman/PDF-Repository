@@ -75,12 +75,11 @@ class ProjectServiceTest {
 
     @Test
     void joinArrayOfPDF_test() {
-
-        @Value("${targetfolder}")
-        private String folder;
-
+        String folder = "C:\\temp\\";
         String reply = projectController.joinArrayOfPDF( new String[]{ "C:\\Users\\pheinzelman\\Desktop\\ok.pdf" , "C:\\Users\\pheinzelman\\Desktop\\sro.pdf"} , false );
             System.out.println( reply );
+        reply = projectController.joinArrayOfPDF( new String[]{ "C:\\Users\\admin\\Desktop\\ao.pdf" , "C:\\Users\\admin\\Desktop\\a.pdf"} , false );
+        System.out.println( reply );
     }
 
 
