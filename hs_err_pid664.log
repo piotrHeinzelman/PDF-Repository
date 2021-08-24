@@ -23,10 +23,10 @@
 
 ---------------  S U M M A R Y ------------
 
-Command Line: -ea -Didea.test.cyclic.buffer.size=1048576 -javaagent:C:\opt\IntelliJ\lib\idea_rt.jar=50197:C:\opt\IntelliJ\bin -Dfile.encoding=UTF-8 com.intellij.rt.junit.JUnitStarter -ideVersion5 -junit5 com.heinzelman.pdf_repo.controller.ProjectServiceTest,joinArrayOfPDF_test
+Command Line: -ea -Didea.test.cyclic.buffer.size=1048576 -javaagent:C:\opt\IntelliJ\lib\idea_rt.jar=50197:C:\opt\IntelliJ\bin -Dfile.encoding=UTF-8 com.intellij.rt.junit.JUnitStarter -ideVersion5 -junit5 com.heinzelman.pdfrepoappjava.controller.ProjectServiceTest,joinArrayOfPDF_test
 
 Host: Intel(R) Core(TM) i5-3320M CPU @ 2.60GHz, 4 cores, 7G,  Windows 10 , 64 bit Build 19041 (10.0.19041.662)
-Time: Thu Jul 29 22:52:08 2021 Œrodkowoeuropejski czas letni elapsed time: 0 seconds (0d 0h 0m 0s)
+Time: Thu Jul 29 22:52:08 2021 ï¿½rodkowoeuropejski czas letni elapsed time: 0 seconds (0d 0h 0m 0s)
 
 ---------------  T H R E A D  ---------------
 
@@ -139,7 +139,7 @@ symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;C:\op
 
 VM Arguments:
 jvm_args: -ea -Didea.test.cyclic.buffer.size=1048576 -javaagent:C:\opt\IntelliJ\lib\idea_rt.jar=50197:C:\opt\IntelliJ\bin -Dfile.encoding=UTF-8 
-java_command: com.intellij.rt.junit.JUnitStarter -ideVersion5 -junit5 com.heinzelman.pdf_repo.controller.ProjectServiceTest,joinArrayOfPDF_test
+java_command: com.intellij.rt.junit.JUnitStarter -ideVersion5 -junit5 com.heinzelman.pdfrepoappjava.controller.ProjectServiceTest,joinArrayOfPDF_test
 java_class_path (initial): C:\opt\IntelliJ\lib\idea_rt.jar;C:\Users\admin\.m2\repository\org\junit\platform\junit-platform-launcher\1.7.2\junit-platform-launcher-1.7.2.jar;C:\opt\IntelliJ\plugins\junit\lib\junit5-rt.jar;C:\opt\IntelliJ\plugins\junit\lib\junit-rt.jar;C:\SpringProjectsFromGitHub\PDF-Repository\target\test-classes;C:\SpringProjectsFromGitHub\PDF-Repository\target\classes;C:\Users\admin\.m2\repository\org\springframework\boot\spring-boot-starter-data-jpa\2.5.2\spring-boot-starter-data-jpa-2.5.2.jar;C:\Users\admin\.m2\repository\org\springframework\boot\spring-boot-starter-aop\2.5.2\spring-boot-starter-aop-2.5.2.jar;C:\Users\admin\.m2\repository\org\springframework\spring-aop\5.3.8\spring-aop-5.3.8.jar;C:\Users\admin\.m2\repository\org\aspectj\aspectjweaver\1.9.6\aspectjweaver-1.9.6.jar;C:\Users\admin\.m2\repository\org\springframework\boot\spring-boot-starter-jdbc\2.5.2\spring-boot-starter-jdbc-2.5.2.jar;C:\Users\admin\.m2\repository\com\zaxxer\HikariCP\4.0.3\HikariCP-4.0.3.jar;C:\Users\admin\.m2\repository\org\springframework\spring-jdbc\5.3.8\spring-jdbc-5.3.8.jar;C:\Users\admin\.m2\repository\jakarta\transaction\jakarta.transaction-api\1.3.3\jakarta.transaction-api-1.3.3.jar;C:\Users\admin\.m2\repository\jakarta\persistence\jakarta.persistence-api\2.2.3\jakarta.persistence-api-2.2.3.jar;C:\Users\admin\.m2\repository\org\hibernate\hibernate-core\5.4.32.Final\hibernate-core-5.4.32.Final.jar;C:\Users\admin\.m2\repository\org\jboss\logging\jboss-logging\3.4.2.Final\jboss-logging-3.4.2.Final.jar;C:\Users\admin\.m2\repository\org\javassist\javassist\3.27.0-GA\javassist-3.27.0-GA.jar;C:\Users\admin\.m2\repository\net\bytebuddy\byte-buddy\1.10.22\byte-buddy-1.10.22.jar;C:\Users\admin\.m2\repository\antlr\antlr\2.7.7\antlr-2.7.7.jar;C:\Users\admin\.m2\repository\org\jboss\jandex\2.2.3.Final\jandex-2.2.3.Final.jar;C:\Users\admin\.m2\repository\com\fasterxml\classmate\1.5.1\classmate-1.5.1.jar;C:\Users\admin\.m2\repository\org\dom4j\dom4j\2.1.3\dom4j-2.1.3.ja
 Launcher Type: SUN_STANDARD
 
