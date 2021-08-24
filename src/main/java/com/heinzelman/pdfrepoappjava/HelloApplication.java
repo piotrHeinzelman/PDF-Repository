@@ -6,7 +6,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -14,10 +16,18 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 public class HelloApplication extends Application {
+
+    Properties properties;
+
     @Override
     public void start(Stage stage) throws IOException {
+
+        loadProperties();
+        connectToDB();
+
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setTitle("Hello!");
@@ -27,23 +37,18 @@ public class HelloApplication extends Application {
 
 
 
-    public void loadPropertiesFromFile()  {
-        try {
-            URI fileURI = HelloApplication.class.getResource("application.properties").toURI();
-            File file = new File( fileURI );
-            List<String> lines = Files.readAllLines(  file.toPath()  );
-            Iterator<String> iterator = lines.iterator();
-            while (iterator.hasNext()){
-                System.out.println( iterator.next() );
-            }
-
- //            File fileURI = new File(fileUrlName.toURI());
-  //            Files()
-
-        } catch (Exception ex ) { System.out.println( ex );}
+    public void loadProperties()  {
+        try ( InputStream input = new FileInputStream( this.getClass().getResource( "application.properties" ).toURI().getPath().toString()  ) ){
+            properties = new Properties();
+            properties.load( input );
+        } catch( Exception ex ) { System.out.println( ex ); }
     }
 
 
+
+    public void connectToDB(){
+
+    }
 
     public static void main(String[] args) {
         launch();
