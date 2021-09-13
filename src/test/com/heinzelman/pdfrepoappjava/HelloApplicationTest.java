@@ -10,10 +10,7 @@ class HelloApplicationTest {
     void myFirstMethod() {
     HelloApplication myApp = new HelloApplication();
         myApp.loadProperties();
-        System.out.println( myApp.properties );
     }
-
-
 }
 
 

@@ -26,7 +26,6 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
 
         loadProperties();
-        connectToDB();
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
@@ -41,14 +40,12 @@ public class HelloApplication extends Application {
         try ( InputStream input = new FileInputStream( this.getClass().getResource( "application.properties" ).toURI().getPath().toString()  ) ){
             properties = new Properties();
             properties.load( input );
+            System.out.println( "files in: " + properties.getProperty("targetFolder") );
         } catch( Exception ex ) { System.out.println( ex ); }
     }
 
 
 
-    public void connectToDB(){
-
-    }
 
     public static void main(String[] args) {
         launch();
