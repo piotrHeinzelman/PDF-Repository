@@ -1,41 +1,90 @@
 package com.heinzelman;
 
 
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.*;
 import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Random;
 
 public class pdfedit {
 
     public static void main(String[] args) {
         //System.out.println(args.length + " , " + args.toString());
-        if (args.length != 3) { System.out.println("USAGE:  java -jar ../../../target/pdfedit.jar C:\\temp\\_PDF_data_\\inOlkadka.pdf C:\\temp\\_PDF_data_\\inOlkadka.pdf C:\\temp\\_PDF_data_\\inSrodek.pdf C:\\temp\\_PDF_data_\\out.pdf\n "); return; }
+        if (args.length != 3) { System.out.println("USAGE:  java -jar pdfedit.jar C:\\temp\\_PDF_data_\\out.pdf  C:\\temp\\_PDF_data_\\out_signed.pdf informacja "); return; }
 
 
-        System.out.println("0: " + args[0]+ "\n1: " + args[1] + "\n2: " + args[2] );
+        System.out.println("0: " + args[0]+ "\n1: " + args[1] + "\ninfo: " + args[2] );
+
+        String FilenameIn = args[0];
+        String FilenameOut = args[1];
 
        try{
-        File fileIn1 = new File(args[0]);
-        File fileIn2 = new File(args[1]);
-        if ( !fileIn1.exists()  || !fileIn1.exists() ) { return; }
+        // ***********
+        //public void stamp( String path, String text , String password ) {
+
+        Random rd = new Random();
+        String password = "" + rd.nextInt( 199999999 )  + "" + (char) (33+rd.nextInt(2)) + "" + rd.nextInt(8888888);
+
+        PdfReader pdfReader = new PdfReader( FilenameIn ) ;
+        PdfStamper pdfStamper = new PdfStamper(pdfReader,  new FileOutputStream( FilenameOut )) ;
+
+                   byte[] userPass =  null;
+                   byte[] ownerPass = password.getBytes();
+
+                   pdfStamper.setEncryption( userPass, ownerPass, 4, PdfEncryption.STANDARD_ENCRYPTION_128);
+                   // 0 - zablokowany druk
+                   // only printing allowed
 
 
-           PDFMergerUtility PDFmerger = new PDFMergerUtility();
-           PDFmerger.setDestinationFileName( args[2] ); // ( folder + "tmp.pdf");
 
-           //adding the source files
-           PDFmerger.addSource(fileIn1);
-           PDFmerger.addSource(fileIn2);
+                   BaseFont baseFont = BaseFont.createFont(
+                           BaseFont.TIMES_ROMAN,
+                           BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
 
-           //Merging the two documents
-           PDFmerger.mergeDocuments(  MemoryUsageSetting.setupMainMemoryOnly() ); //   mergeDocuments();
-           //System.out.println("Documents merged:" + PDFmerger.getDestinationFileName() );
+                   //Get the number of pages in pdf.
+                   int pages = pdfReader.getNumberOfPages();
 
-           //PDFmerger.
+                   //Iterate the pdf through pages.
+                   for(int i=1; i<=pages; i++) {
+                       //Contain the pdf data.
+                       PdfContentByte pageContentByte = pdfStamper.getOverContent(i);
 
+                       pageContentByte.beginText();
+                       //Set text font and size.
+                       pageContentByte.setFontAndSize(baseFont, 14);
+                       pageContentByte.setCMYKColorFill(100,0,100,0);
+
+                       pageContentByte.setTextMatrix(5, 5);
+
+                       Rectangle pageSize = ( pdfReader.getPageSize(i) );
+
+                       pageContentByte.setTextMatrix( 2 , 1 , -1 , 2 , 15 , 15 ); // pageSize.getWidth()-10
+                       // b+c rotate
+                       // a+d skala
+                       // x+y poczatek
+
+                       //Write text
+                       pageContentByte.showText( args[2] ) ;
+                       pageContentByte.endText();
+
+                       //pageContentByte.
+                   }
+
+
+
+
+                   //Close the pdfStamper.
+                   pdfStamper.close();
+
+
+        // ***********
 
 
             }
@@ -43,73 +92,7 @@ public class pdfedit {
             catch ( FileNotFoundException ex ) { System.out.println( ex ); }
             catch ( IOException ex ) { System.out.println( ex ); }
             catch ( NoClassDefFoundError ex ) { System.out.println( ex ); }
+            catch ( DocumentException ex ) { System.out.println( ex ); }
+
         }
-
-
-/*
-
-        //@Value("${targetfolder}")
-        private String folder;
-
-        public String join( File file1, File file2 ) throws FileNotFoundException, IOException {
-
-
-
-            //    File file1 = new File( one );
-            //    File file2 = new File( two );
-
-            //Instantiating PDFMergerUtility class
-            PDFMergerUtility PDFmerger = new PDFMergerUtility();
-
-            //Setting the destination file
-            PDFmerger.setDestinationFileName( folder + "tmp.pdf");
-
-            //adding the source files
-            PDFmerger.addSource(file1);
-            PDFmerger.addSource(file2);
-
-            //Merging the two documents
-            PDFmerger.mergeDocuments(  MemoryUsageSetting.setupMainMemoryOnly() ); //   mergeDocuments();
-            System.out.println("Documents merged");
-
-
-
-            return PDFmerger.getDestinationFileName();
-        }
-
-
-
-
-
-
-        public String joinArray(  String[] files , File result ) throws FileNotFoundException, IOException {
-
-            PDFMergerUtility PDFmerger = new PDFMergerUtility();
-
-            String resultAsString = result.getPath().toString();
-            //Setting the destination file
-            PDFmerger.setDestinationFileName( resultAsString );
-
-            //adding the source files
-            for ( int i = 0 ; i < files.length ; i++ ) {
-                File f = new File ( files[i]);
-                if ( f.exists() ) PDFmerger.addSource( f ) ;
-            }
-
-            //Merging the two documents
-
-            PDFmerger.mergeDocuments(  MemoryUsageSetting.setupMainMemoryOnly() );
-            // PDFmerger.mergeDocuments( MemoryUsageSetting.setupTempFileOnly( 1000000000 ) ); //  MemoryUsageSetting.setupMainMemoryOnly() ); //   mergeDocuments();
-            return PDFmerger.getDestinationFileName();
-        }
-
-
-
-
-
-
-*/
-
-
-
 }
