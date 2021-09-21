@@ -1,0 +1,43 @@
+//  ************  compile
+
+javac pdfedit.java
+  -> 
+  pdfedit.class
+  
+
+OR
+
+javac src\java\pdfedit.java
+
+  ->
+  src\java\pdfedit.class
+  
+  
+  
+javac com/heinzelman/pdfedit.java  
+
+
+//****************************************
+// *** run   pdfedit.class
+cd src/java/pdfedit
+
+	java pdfedit
+
+	
+  
+  
+  
+// packaging JAR  
+  
+jar cf pdfedit.jar pdfedit.class
+jar cfm pdfedit.jar manifest.txt pdfedit.class
+
+jar cef pdfedit pdfedir.jar com.heinzelman.pdfedit com/heinzelman/*.class
+    ( package com.heinzelman; )
+
+ 
+
+ 
+
+  
+  
