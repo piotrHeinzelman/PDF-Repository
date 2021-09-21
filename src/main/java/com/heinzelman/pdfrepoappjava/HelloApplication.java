@@ -25,6 +25,9 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
+        // https://www.youtube.com/watch?v=fMa-GK3AfEc
+        // package to artifact javaFX
+
         loadProperties();
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
