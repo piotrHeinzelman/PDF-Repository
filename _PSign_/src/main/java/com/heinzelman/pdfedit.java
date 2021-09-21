@@ -1,8 +1,7 @@
 package com.heinzelman;
 
 
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
@@ -44,7 +43,24 @@ public class pdfedit {
 
 
 
-                   BaseFont baseFont = BaseFont.createFont(
+/*
+           p = new Phrase(
+                   "This TRANSPARENT watermark is added ON TOP OF the existing content", f);
+           over.saveState();
+           PdfGState gs1 = new PdfGState();
+           gs1.setFillOpacity(0.5f);
+           over.setGState(gs1);
+           ColumnText.showTextAligned(over, Element.ALIGN_CENTER, p, 297, 450, 0);
+           over.restoreState();
+           stamper.close();
+           reader.close();
+
+*/
+
+
+
+
+           BaseFont baseFont = BaseFont.createFont(
                            BaseFont.TIMES_ROMAN,
                            BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
 
@@ -53,15 +69,26 @@ public class pdfedit {
 
                    //Iterate the pdf through pages.
                    for(int i=1; i<=pages; i++) {
+
+
+
+
+
+
+
+
+
                        //Contain the pdf data.
                        PdfContentByte pageContentByte = pdfStamper.getOverContent(i);
 
                        pageContentByte.beginText();
                        //Set text font and size.
                        pageContentByte.setFontAndSize(baseFont, 14);
-                       pageContentByte.setCMYKColorFill(100,0,100,0);
+                       pageContentByte.setCMYKColorFill(25,25,25,25);
+
 
                        pageContentByte.setTextMatrix(5, 5);
+
 
                        Rectangle pageSize = ( pdfReader.getPageSize(i) );
 
@@ -74,7 +101,31 @@ public class pdfedit {
                        pageContentByte.showText( args[2] ) ;
                        pageContentByte.endText();
 
-                       //pageContentByte.
+
+
+
+
+                       // **********
+                       BaseFont f = BaseFont.createFont(
+                               BaseFont.TIMES_ROMAN,
+                               BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+
+
+                       Phrase p = new Phrase( "This TRANSPARENT watermark is added ON TOP OF the existing content"  );
+
+                       pageContentByte.saveState();
+                       PdfGState gs1 = new PdfGState();
+                       gs1.setFillOpacity(0.3f);
+                       pageContentByte.setGState(gs1);
+                       ColumnText.showTextAligned(pageContentByte, Element.ALIGN_CENTER, p, 297, 450, 0);
+                       pageContentByte.restoreState();
+
+                       // ************
+
+
+
+
+
                    }
 
 
