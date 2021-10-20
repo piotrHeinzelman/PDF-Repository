@@ -53,10 +53,8 @@ public class ActionListeners implements ActionListener {
             }
 
             @Override
-            public void filesDropped(File[] files) {
-                for ( File f : files ){
-                    System.out.println( f.toString() );
-                }
+            public void filesDropped(File file) {
+                    System.out.println( file.toString() );
             }
         };
 
