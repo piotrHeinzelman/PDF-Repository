@@ -27,9 +27,26 @@ public class Main {
 
         Container contentPane = frame.getContentPane();
 
-        MyLineComponent line1 = new MyLineComponent();
-        contentPane.add( BorderLayout.CENTER , line1 );
 
+
+
+        JPanel centerPanel = new JPanel();
+        MyLineComponent line1 = new MyLineComponent(1);
+        MyLineComponent line2 = new MyLineComponent(2);
+        MyLineComponent line3 = new MyLineComponent(3);
+        MyLineComponent line4 = new MyLineComponent(4);
+        MyLineComponent line5 = new MyLineComponent(5);
+        MyLineComponent line6 = new MyLineComponent(6);
+
+        centerPanel.add( line1 );
+        centerPanel.add( line2 );
+        centerPanel.add( line3 );
+        centerPanel.add( line4 );
+        centerPanel.add( line5 );
+        centerPanel.add( line6 );
+
+
+        contentPane.add( BorderLayout.CENTER , centerPanel );
 
         frame.setVisible(true);
 
