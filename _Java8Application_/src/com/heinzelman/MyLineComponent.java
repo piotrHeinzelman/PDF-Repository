@@ -56,7 +56,6 @@ public class MyLineComponent extends JPanel {
         }
 
 
-        System.out.println( "myTYPE is: " + type );
 
         this.textArea = new JTextField( ""  );
         this.textArea.setBorder( BORDER );
@@ -71,22 +70,16 @@ public class MyLineComponent extends JPanel {
         this.buttonEdit.addActionListener( new ButtonEditActionListener());
 
 
-
-
         this.buttonDel = new JButton(" Delete ");
         this.buttonDel.addActionListener( new ButtonDelActionListener());
 
 
-        //ImageIcon icon = createImageIcon("images/wavy.gif",  "wavy-line border icon"); //20x22
-        //JImageComponent ic = new JImageComponent(myImageGoesHere);
-        //imagePanel.add(ic);
+            this.add( label );
+            this.add( textArea );
+            this.add( buttonEdit );
+            this.add( buttonDel );
 
-        this.add( label );
-        this.add( textArea );
-        this.add( buttonEdit );
-        this.add( buttonDel );
-
-        this.getInsets( INSERTS );
+            this.getInsets( INSERTS );
     }
 
 
@@ -106,22 +99,6 @@ public class MyLineComponent extends JPanel {
     }
 }
 
-
-/*
-
-        // Prepare buttons
-        JTextArea loadFile1 = new JTextArea("[ dodaj plik ]") ;
-        FileDrop.Listener listener = new FileDropListener();
-        new FileDrop( loadFile1 , listener );
-
-
-        JButton button2 = new JButton("Button 2");
-        button2.addActionListener( new ButtonActionListener());
-
-
-
-*
-* */
 
 
 
