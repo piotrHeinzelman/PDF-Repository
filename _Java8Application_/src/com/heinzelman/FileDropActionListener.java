@@ -7,18 +7,16 @@ import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 
 class FileDropListener implements FileDrop.Listener {
 
     @Override
     public void filesDropped( File[] files ) {
+        File file = files[0];
+        if (file==null) return;
 
-        for( int i = 0; i < files.length; i++ ) {
-            try {
-                System.out.println( files[i].getCanonicalPath() );
-
-            } catch( java.io.IOException e ) {}
-        }   // end for: through each dropped file
+        try { file.getCanonicalPath(); } catch (IOException e) { e.printStackTrace();}
 
         System.out.println( files );
 

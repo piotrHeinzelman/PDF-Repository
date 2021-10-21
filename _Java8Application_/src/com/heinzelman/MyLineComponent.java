@@ -64,8 +64,6 @@ public class MyLineComponent extends JPanel {
         this.textArea.setHorizontalAlignment((int) CENTER_ALIGNMENT);
         new FileDrop( this.textArea , listener );
 
-        this.turnToNoFile();
-
         this.buttonEdit = new JButton(" Edit ");
         this.buttonEdit.addActionListener( new ButtonEditActionListener());
 
@@ -80,6 +78,8 @@ public class MyLineComponent extends JPanel {
             this.add( buttonDel );
 
             this.getInsets( INSERTS );
+
+        this.turnToNoFile();
     }
 
 
@@ -88,6 +88,8 @@ public class MyLineComponent extends JPanel {
        textArea.setText( "DATA:" );
        textArea.setBackground( BG_ExistsFile );
        textArea.setDisabledTextColor( FONTCOLOR_ExistsFile );
+       buttonDel.enable();
+       buttonEdit.disable();
     }
 
 
@@ -96,7 +98,15 @@ public class MyLineComponent extends JPanel {
         textArea.setText( EMPTY_TEXT );
         textArea.setBackground( BG_NoFile );
         textArea.setDisabledTextColor( FONTCOLOR_NoFile );
+        buttonDel.disable();
+        buttonEdit.enable();
     }
+
+
+    public void loadContent( Long databaseId ){
+        System.out.println( Main.PATH  + " :: " + databaseId );
+    }
+
 }
 
 

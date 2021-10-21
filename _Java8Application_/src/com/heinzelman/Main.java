@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class Main {
 
-    private static String PATH = "C:\\temp\\_PDFSYSTEM_\\";
+    public static final String PATH = "C:\\temp\\_PDFSYSTEM_\\";
 
     public static void main(String[] args) {
 
@@ -29,6 +29,9 @@ public class Main {
         // FIND SECTION
         JPanel topPanel = new JPanel();
             topPanel.add( new MySearchComponent());
+            topPanel.add( new JSeparator());
+            topPanel.add( new JSeparator());
+            topPanel.add( new JSeparator());
         contentPane.add( BorderLayout.NORTH , topPanel);
 
 
