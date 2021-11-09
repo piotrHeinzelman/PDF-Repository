@@ -1,11 +1,5 @@
 package com.heinzelman;
 
-import com.sun.javafx.property.adapter.PropertyDescriptor;
-
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 

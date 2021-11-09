@@ -53,6 +53,10 @@ public class MyLineComponent extends JPanel {
             case 4: this.label.setText( "4. Techniczny  " ) ; break;
             case 5: this.label.setText( "5. Koszty okładka  " ) ; break;
             case 6: this.label.setText( "6. Koszty  " ) ; break;
+            case 7: this.label.setText( "7. Inne okładka  " ) ; break;
+            case 8: this.label.setText( "8. Inne  " ) ; break;
+            case 9: this.label.setText( "9. Dodatkowe okładka  " ) ; break;
+            case 0: this.label.setText( "0. Dodatkowe  " ) ; break;
         }
 
 

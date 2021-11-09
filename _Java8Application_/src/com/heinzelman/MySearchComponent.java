@@ -9,6 +9,8 @@ import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Map;
 
 public class MySearchComponent extends JPanel {
 
@@ -31,9 +33,17 @@ public class MySearchComponent extends JPanel {
     private final JTextField textArea;
     private final JButton buttonFind;
 
+    private Map<Long,String> listIds = null;
 
 
-    public MySearchComponent() throws HeadlessException {
+
+
+
+
+
+    public MySearchComponent( Map<Long, String> listIds ) throws HeadlessException {
+
+        this.listIds = listIds;
 
         this.label = new JLabel(" szukaj ", SwingConstants.RIGHT);
         this.label.setPreferredSize( DIM );
@@ -48,22 +58,40 @@ public class MySearchComponent extends JPanel {
         this.add( label );
         this.add( textArea );
         this.add( buttonFind );
-
     }
+
+    public Map<Long,String> getListIds() { return this.listIds; }
 }
 
 
 class ButtonFindActionListener implements ActionListener {
 
-   private static DropTarget dropTarget;
-   private static DropTargetListener dropTargetListener;
+
+   //private static DropTarget dropTarget;
+   //private static DropTargetListener dropTargetListener;
 
    @Override
    public void actionPerformed(ActionEvent e) {
-       System.out.println( "Find: " + e );
+       //System.out.println( "This:" + this + "\ne:" + e + "\nModifiers: " + e ); //.getClass().getSimpleName()
+       JButton myButton = ( JButton ) e.getSource();
+       MySearchComponent mySearchComponent = ( MySearchComponent ) myButton.getParent();
+       JTextField myTextField = ( JTextField ) mySearchComponent.getComponent( 1 );
+       Map<Long,String> listIds = mySearchComponent.getListIds();
+       String text = myTextField.getText().trim().toUpperCase();
 
-       JButton myButton = (JButton) e.getSource();
-       MyLineComponent myLineComponent = (MyLineComponent) myButton.getParent();
+       if ( text.equals("") ) return;
+       System.out.println( "Text: " + text );
+
+       listIds.clear();
+       switch ( text ){
+           case"A": listIds.put( 1L, "ProjektPierwszy!" ); break;
+           case"AA": listIds.put( 1L, "ProjektPierwszy!" ); listIds.put( 2L, "Drugi!" ); break;
+           case"AAA": listIds.put( 1L, "ProjektPierwszy!" ); listIds.put( 2L, "Drugi!" ); listIds.put( 3L, "Trzeci!" ); break;
+       }
+
+       System.out.println( listIds );
+       //JButton myButton = (JButton) e.getSource();
+       //MyLineComponent myLineComponent = (MyLineComponent) myButton.getParent();
 
    }
 }
