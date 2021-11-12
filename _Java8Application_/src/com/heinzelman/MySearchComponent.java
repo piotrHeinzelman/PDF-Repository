@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
 
-public class MySearchComponent extends JPanel {
+public class MySearchComponent extends JComponent implements ActionListener {
 
     private static final Color FONTCOLOR_NoFile = new Color ( 20,20,20 );
     private static final Color FONTCOLOR_ExistsFile = new Color ( 200,200,200 );
@@ -29,21 +29,20 @@ public class MySearchComponent extends JPanel {
 
 
 
-    private final JLabel label;
-    private final JTextField textArea;
-    private final JButton buttonFind;
+    //private final JLabel label;
+    //private final JTextField textArea;
+//    private final JButton buttonFind;
 
-    private Map<Long,String> listIds = null;
-
-
+//    private Map<Long,String> listProj;
 
 
 
+    public MySearchComponent(  Map<Long,String> listProj  ) throws HeadlessException  {
 
-
-    public MySearchComponent( Map<Long, String> listIds ) throws HeadlessException {
-
-        this.listIds = listIds;
+        JLabel j = this.add( new JLabel("???") );
+        j.setVisible(true);
+        /*
+        this.listProj = listProj;
 
         this.label = new JLabel(" szukaj ", SwingConstants.RIGHT);
         this.label.setPreferredSize( DIM );
@@ -52,48 +51,40 @@ public class MySearchComponent extends JPanel {
         this.textArea.setPreferredSize( DIM );
 
         this.buttonFind = new JButton(" Szukaj ");
-        this.buttonFind.addActionListener( new ButtonFindActionListener());
+        this.buttonFind.addActionListener( this );
         this.buttonFind.setPreferredSize( DIM );
 
         this.add( label );
         this.add( textArea );
         this.add( buttonFind );
+        */
+
     }
 
-    public Map<Long,String> getListIds() { return this.listIds; }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        System.out.println( e );
+        /*
+            JButton myButton = ( JButton ) e.getSource();
+            MySearchComponent mySearchComponent = ( MySearchComponent ) myButton.getParent();
+            JTextField myTextField = ( JTextField ) mySearchComponent.getComponent( 1 );
+
+            String text = myTextField.getText().trim().toUpperCase();
+
+            if ( text.equals("") ) return;
+            System.out.println( "Text: " + text );
+
+            listIds.clear();
+            switch ( text ){
+                case"A": listIds.put( 1L, "ProjektPierwszy!" ); break;
+                case"AA": listIds.put( 1L, "ProjektPierwszy!" ); listIds.put( 2L, "Drugi!" ); break;
+                case"AAA": listIds.put( 1L, "ProjektPierwszy!" ); listIds.put( 2L, "Drugi!" ); listIds.put( 3L, "Trzeci!" ); break;
+            }
+
+            System.out.println( listIds );
+            */
+
+    }
 }
-
-
-class ButtonFindActionListener implements ActionListener {
-
-
-   //private static DropTarget dropTarget;
-   //private static DropTargetListener dropTargetListener;
-
-   @Override
-   public void actionPerformed(ActionEvent e) {
-       //System.out.println( "This:" + this + "\ne:" + e + "\nModifiers: " + e ); //.getClass().getSimpleName()
-       JButton myButton = ( JButton ) e.getSource();
-       MySearchComponent mySearchComponent = ( MySearchComponent ) myButton.getParent();
-       JTextField myTextField = ( JTextField ) mySearchComponent.getComponent( 1 );
-       Map<Long,String> listIds = mySearchComponent.getListIds();
-       String text = myTextField.getText().trim().toUpperCase();
-
-       if ( text.equals("") ) return;
-       System.out.println( "Text: " + text );
-
-       listIds.clear();
-       switch ( text ){
-           case"A": listIds.put( 1L, "ProjektPierwszy!" ); break;
-           case"AA": listIds.put( 1L, "ProjektPierwszy!" ); listIds.put( 2L, "Drugi!" ); break;
-           case"AAA": listIds.put( 1L, "ProjektPierwszy!" ); listIds.put( 2L, "Drugi!" ); listIds.put( 3L, "Trzeci!" ); break;
-       }
-
-       System.out.println( listIds );
-       //JButton myButton = (JButton) e.getSource();
-       //MyLineComponent myLineComponent = (MyLineComponent) myButton.getParent();
-
-   }
-}
-
 
