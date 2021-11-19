@@ -1,34 +1,31 @@
 package com.heinzelman;
 
-import com.heinzelman.MyLineComponent;
-import com.heinzelman.MySearchComponent;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class MyJFrame extends JFrame {
 
-
-    private JPanel topPanel;
-    private JPanel bottomPanel;
-    private JPanel centerPanel;
-
-
     public MyJFrame(  String name ) throws HeadlessException {
         super( name );
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(570, 520);
-        this.getContentPane();
-
-           topPanel = (JPanel) this.getContentPane().add(BorderLayout.NORTH,  new JPanel());
-        centerPanel = (JPanel) this.getContentPane().add(BorderLayout.CENTER, new JPanel());
-        bottomPanel = (JPanel) this.getContentPane().add(BorderLayout.SOUTH,  new JPanel());
+        //this.getContentPane();
 
     }
 
-    public JComponent addToN( JComponent comp ){ return (JComponent) topPanel.add( comp ); }
-    public JComponent addToC( JComponent comp ){ return (JComponent) centerPanel.add( comp ); }
-    public JComponent addToS( JComponent comp ){ return (JComponent) bottomPanel.add( comp ); }
+    public JComponent addToN(JComponent component ){
+        return (JComponent) getContentPane().add( BorderLayout.NORTH , component );
+    }
+
+    public JComponent addToC(JComponent component ){
+        return (JComponent) getContentPane().add( BorderLayout.CENTER , component );
+    }
+
+    public JComponent addToS(JComponent component ){
+        return (JComponent) getContentPane().add( BorderLayout.SOUTH , component );
+    }
+  //  public void addToC( JComponent comp ){ return (JComponent) centerPanel.add( comp ); }
+  //  public void addToS( JComponent comp ){ return (JComponent) bottomPanel.add( comp ); }
 
 
 

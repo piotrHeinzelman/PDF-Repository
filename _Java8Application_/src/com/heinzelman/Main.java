@@ -1,45 +1,31 @@
 package com.heinzelman;
 
 import javax.swing.*;
-import java.util.HashMap;
-import java.util.Map;
+
+import static java.awt.EventQueue.invokeLater;
 
 public class Main {
 
-    public static final String PATH = "C:\\temp\\_PDFSYSTEM_\\";
+    public static void main  (String[] args) {
 
-    private static Map<Long, String> listProj = new HashMap<>();
-    private static Long selectedId = null;
+        invokeLater(new Runnable() {
+            @Override public void run() {
+                try {
+                    UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+                } catch ( ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e ) { e.printStackTrace(); }
+                new Window().setVisible(true);
+            }
+        });
 
-    public static void main(String[] args) {
-
-    MyJFrame frame = new MyJFrame( "PDF Repo"  );
-
-        JComponent jComponent = frame.addToN( new JLabel("?") );
-        JComponent     search = frame.addToN( new MySearchComponent( listProj ) );
-
-        frame.setVisible( true );
     }
 
-    /*
-
-    this.panel = new JPanel();
-this.panel.setLayout(new FlowLayout());
-add(panel, BorderLayout.CENTER);
-JButton button = new JButton("CLICK HERE");
-add(button, BorderLayout.SOUTH);
-button.addActionListener(this);
-setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-setSize(500, 500);
-setVisible(true);
-
-this.panel.add(new JButton("Button"));
-this.panel.revalidate();
-validate();
-
-     */
-
-
+        /*
+        javax.swing.UIManager$LookAndFeelInfo[Metal javax.swing.plaf.metal.MetalLookAndFeel]
+        javax.swing.UIManager$LookAndFeelInfo[Nimbus javax.swing.plaf.nimbus.NimbusLookAndFeel]
+        javax.swing.UIManager$LookAndFeelInfo[CDE/Motif com.sun.java.swing.plaf.motif.MotifLookAndFeel]
+        javax.swing.UIManager$LookAndFeelInfo[Windows com.sun.java.swing.plaf.windows.WindowsLookAndFeel]
+        javax.swing.UIManager$LookAndFeelInfo[Windows Classic com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel]
+        */
 
 }
 

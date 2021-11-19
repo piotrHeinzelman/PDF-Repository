@@ -1,7 +1,9 @@
 package com.heinzelman;
 
 
-import java.awt.event.ActionEvent;
+
+import org.junit.Test;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,25 +12,11 @@ import java.nio.file.StandardCopyOption;
 
 public class FileTools {
 
-    //public static final String PATH = "C:\\temp\\_PDFSYSTEM_\\";  P:\SysWyd2\PDF_repo\VER_3_DATA
-    public static final String PATH = "P:\\SysWyd2\\PDF_repo\\VER_3_DATA\\";
-
-
-    public void addFile ( int type, Long baseId, ActionEvent e , File file  )  {
-        System.out.println( "addFile, type: " + type + "baseId: " + baseId + ", ActionEvent" + e + "File" + file ); }
-    public void editFile ( int type, Long baseId, ActionEvent e , File file  )  {
-        System.out.println( "editFile, type: " + type + "baseId: " + baseId + ", ActionEvent" + e + "File" + file); }
-    public void deleteFile ( int type, Long baseId, ActionEvent e  , File file )  {
-        System.out.println( "deleteFile, type: " + type + "baseId: " + baseId + ", ActionEvent" + e+ "File" + file ); }
-
-
-
-
 
     public void saveFile ( String inFile_path , String code , int type  )  {
 
 
-        File theDir = new File(  PATH + "/" + code  );
+        File theDir = new File(  Main.PATH + "/" + code  );
             if (!theDir.exists()){ theDir.mkdirs(); }
 
             File inFile = new File ( inFile_path );
@@ -38,7 +26,7 @@ public class FileTools {
 
         try {
             Path originalPath = inFile.toPath();
-            Path target = Paths.get(  PATH + "/" + code + "/" + code + "_" + type + ".pdf" );
+            Path target = Paths.get(  Main.PATH + "/" + code + "/" + code + "_" + type + ".pdf" );
             Files.copy(originalPath, target, StandardCopyOption.REPLACE_EXISTING);
         } catch ( IOException e ) {
             System.out.println( e );
@@ -53,8 +41,10 @@ public class FileTools {
 
 
     // :- ) !!
-    //@Test
-    //public void saveFileTest(){ saveFile( "C:\\Users\\admin\\Desktop\\1.pdf" , "123"  , 1 );  }
+    @Test
+    public void saveFileTest(){
+        saveFile( "C:\\Users\\admin\\Desktop\\1.pdf" , "123"  , 1 );
+    }
 
 
 
