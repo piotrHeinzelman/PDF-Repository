@@ -1,0 +1,262 @@
+package com.heinzelman.Tools;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDriver;
+
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
+import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.function.Function;
+
+public class DBTools {
+
+    public static final String PREFIX = "{" + (char) 0x07 + "#";
+    public static final String SUFFIX = "#" + (char) 0x07 + "}";
+
+    private String url;
+    private Properties suppliedProperties = null;
+
+
+    public DBTools(String url, String user, String pass) {
+        this.url = url;
+        suppliedProperties = new Properties();
+        suppliedProperties.setProperty("username", user);
+        suppliedProperties.setProperty("password", pass);
+    }
+
+
+    public void loadResultFileToDB(String fileName, Function<Map<String, String>, String> f) {
+        String line = "";
+        //if ( f==null ) {  f = x -> { System.out.println(x); return ""; }; }
+
+        try (FileReader fileReader = new FileReader(fileName, StandardCharsets.UTF_8)) {
+            byte[] suf = SUFFIX.getBytes(StandardCharsets.UTF_8);
+            byte lastChar = suf[suf.length - 1];
+            StringBuffer token = new StringBuffer(1000);
+            int data;
+            do {
+                data = fileReader.read();
+                token.append((char) data);
+
+                if (data == lastChar && token.toString().endsWith(SUFFIX)) {
+                    line = token.substring(PREFIX.length(), token.length() - SUFFIX.length());
+
+                    f.apply(stringToMap(line));
+
+                    token.delete(0, token.length());
+                }
+            }
+            while (data != -1);
+        } catch (IOException throwables) {
+            throwables.printStackTrace();
+        }
+        return;
+    }
+
+
+    public static Map<String, String> stringToMap(String str) {
+        //System.out.println( str );
+        Map<String, String> map = new HashMap<>(5);
+
+        while (str.indexOf("<") != -1) {
+            String key = str.substring(1, str.indexOf(">"));
+            int end = str.indexOf("</" + key + ">");
+            map.put(key, str.substring(key.length() + 2, end));
+            str = str.substring(end + 3 + key.length());
+        }
+        return map;
+    }
+
+
+    public void sqlResultToFile(String sql, String outputFileFullName) {
+        try (
+                Connection connection = new SQLServerDriver().connect(url, suppliedProperties);
+                OutputStreamWriter outStream = new OutputStreamWriter(new FileOutputStream(outputFileFullName), StandardCharsets.UTF_8);
+        ) {
+            System.out.println( " *** SQL ***  " );
+            System.out.println( "" );
+            System.out.println( sql );
+            System.out.println( "" );
+            System.out.println( "  ----------------------------  " );
+
+
+
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            ResultSetMetaData metaData = rs.getMetaData();
+            int length = rs.getFetchSize();
+            int width = metaData.getColumnCount();
+
+            String[] columnNames = new String[width];
+            String[] columnTypes = new String[width];
+            for (int i = 0; i < width; i++) {
+                columnNames[i] = metaData.getColumnName(i + 1);
+                columnTypes[i] = metaData.getColumnTypeName(i + 1);
+            }
+
+            while (rs.next()) {
+                StringBuffer out = new StringBuffer(300);
+                out.append(PREFIX);
+                for (int i = 0; i < width; i++) {
+                    out.append("<").append(columnNames[i]).append(">");
+                    switch (columnTypes[i]) {
+                        case "int": case "tinyint": out.append(rs.getInt(i + 1)); break;
+                        case "varchar":  out.append(rs.getString(i + 1)); break;
+                        case "uniqueidentifier": out.append(rs.getString(i + 1)); break;
+                        case "float":  out.append(rs.getDouble(i + 1)); break;
+                        case "bit":  out.append(rs.getBoolean(i + 1)); break;
+                        case "timestamp":  out.append(rs.getString(i + 1)); break;
+                        case "char":  out.append(rs.getString(i + 1)); break;
+                        case "datetime":  out.append(rs.getDate(i + 1)); break;
+
+                        default:
+                        out.append(rs.getString(i + 1));
+                        //out.append("kolumna " + columnTypes[i] + " jeszcze nie obslugiwana DBTools line 110 ");
+                        break; // out.append("kolumna " + columnTypes[i] + " jeszcze nie obslugiwana DBTools line 110 ");
+                    }
+                    out.append("</").append(columnNames[i]).append(">");
+                }
+                out.append(SUFFIX);
+                outStream.write(out.toString());
+            }
+
+        } catch (SQLException | IOException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+
+    public static <T extends Object> T isNotEmpty(T o) {
+        if (o == null) return null;
+        if (o.toString().length() == 0) return null;
+        if (o.toString().toUpperCase().equals("NULL")) return null;
+        if (o instanceof String) return (T) o;
+        if (o instanceof Long) return (T) o;
+        if (o instanceof Double) return (T) o;
+        return o;
+    }
+
+
+    public static void ifDictValueExistsAndTargetIsEmpty( String targetMethodName,   Object object , String dictValue, AbstractDictService dictService ) {
+
+        Optional<AbstractDict> OdictItem = dictService.findByName( dictValue.trim() );
+        if (OdictItem.isEmpty()) return;
+        AbstractDict dictItem = OdictItem.get();
+
+        Method setter = findXetterByName("set" + targetMethodName, object ) ;
+        // POPRAWIC I TE FUNKCJE ! - WYWOLANIE SETTERA Z PRZEMAPIWANIEM OBIEKTU !
+        try { setter.invoke( object , ( setter.getParameterTypes()[0].cast( dictItem ) )  );  } catch (InvocationTargetException | IllegalAccessException e){}
+        //try { setter.invoke( object,  convertToClassName (  value,  setter.getParameterTypes()[0].getSimpleName() ) );  } catch ( InvocationTargetException | IllegalAccessException  e) { System.out.println(e); }
+    }
+
+
+
+
+
+
+
+
+    public static void ifTargetEmptyAndValueExists( String  targetMethodName, Object object , Object value , Boolean force  ) {
+        //System.out.println( targetMethodName + "" + object );
+        if  ( value==null || object==null || targetMethodName==null ) return;
+        if ( value instanceof String ) {
+            value = (String) value.toString().trim();
+            if ( value.toString().equals("") ) return;
+            if ( value.toString().equals("0") ) return;
+            if ( value.toString().equals("0.0") ) return;
+            if ( value.toString().toUpperCase().equals("NULL")) return;
+        }
+
+        Method getter = findXetterByName("get" + targetMethodName, object );
+        if ( getter==null  ) {
+            System.out.println( "GETTER: IS NULL" + targetMethodName + " : " + value + " ? " + object);
+        }
+        Method setter = findXetterByName("set" + targetMethodName, object ) ;
+        if ( getter==null  ) {
+            System.out.println( "SETTER: IS NULL" + targetMethodName + " : " + value + " ? " + object);
+        }
+
+        if ( force==false ) {
+            // check target HAS ANY value. if is NOT empty, no OVERRIDE, return;
+            Object presentValue = null;
+            try { presentValue = getter.invoke( object ); } catch ( InvocationTargetException | IllegalAccessException  e) { System.out.println(e); }
+            if ( presentValue!=null && !presentValue.toString().trim().equals("") && !presentValue.toString().trim().toLowerCase().equals("null") && !presentValue.toString().trim().toLowerCase().equals("0") && !presentValue.toString().trim().toLowerCase().equals("0.0")) return;
+        }
+
+        try { setter.invoke( object,  convertToClassName (  value,  setter.getParameterTypes()[0].getSimpleName() ) );  } catch ( InvocationTargetException | IllegalAccessException  e) { System.out.println(e); }
+    }
+
+
+    // ** Tools simple class
+
+    public static Method findXetterByName(String  name , Object object ){
+        String nameLower = name.toLowerCase();
+        for( Method m : object.getClass().getMethods() ){
+            if ( nameLower.equals( m.getName().toLowerCase())) return m;
+        }
+        for( Method m : object.getClass().getDeclaredMethods() ){
+            if ( nameLower.equals( m.getName().toLowerCase())) return m;
+        }
+        for( Method m : object.getClass().getSuperclass().getDeclaredMethods() ){
+            if ( nameLower.equals( m.getName().toLowerCase())) return m;
+        }
+        System.out.println( " NO GETTERS " + name + " : " + object );
+        return null;
+    }
+
+
+
+    public static String mapToString( Map<String, Object> map, String  formatString  ) {
+        StringBuffer out = new StringBuffer();
+        for ( String key : map.keySet() ) {
+            if (  map.get(key)==null )  { out.append( "<"+key+"></"+key+">" ); }
+            else if (  map.get( key ).equals("null")) { out.append( "<"+key+"></"+key+">" ); }
+            else if ( map.get(key) instanceof Double ) {
+                if (key.equals("hurt")||key.equals("promo")) { out.append( "<"+key+">"+(  String.format( formatString, map.get( key )))+"</"+key+">" );  }
+                else { out.append( "<"+key+">" + /*(  String.format( formatString, */  map.get( key )/* )  )*/+"</"+key+">" ); }
+            }
+            else { out.append( "<"+key+">" + ( map.get( key )  )+"</"+key+">" ); }
+        }
+        return out.toString();
+    }
+
+
+
+
+    private static Object convertToClassName ( Object value, String className ) {
+        switch ( className.toLowerCase() ){
+            case "string":
+                return ( String ) ""+value.toString();
+            case "long":
+                if ( value instanceof Long ) { return (Long) value; }
+                return ( Long ) Long.parseLong( value.toString() );
+            case "double":
+                if ( value instanceof Double ) { return (Double) value; }
+                return ( Double ) Double.parseDouble( value.toString() );
+            case "boolean":
+                if ( value instanceof Boolean ) { return (Boolean) value; }
+                return ( Boolean ) Boolean.parseBoolean( value.toString() );
+
+            default:
+                System.out.println( value );
+                System.out.println(
+                        "DBTools: nie obsługuje tego typu zawartości " + className + " line 341 "
+                );
+
+        }
+        return null;
+    }
+
+
+
+
+}
+
