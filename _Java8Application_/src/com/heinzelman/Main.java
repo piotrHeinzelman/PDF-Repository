@@ -18,7 +18,8 @@ public class Main {
         invokeLater(new Runnable() {
             @Override public void run() {
                 String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-                String appConfigPath = rootPath + "com\\heinzelman\\config.ini";
+                //String appConfigPath = rootPath + "com\\heinzelman\\config.ini";
+                String appConfigPath = rootPath + "config.ini";
                 Properties appProps = new Properties();
                 try ( FileInputStream inputStream = new FileInputStream(appConfigPath) ){
                     appProps.load( inputStream );

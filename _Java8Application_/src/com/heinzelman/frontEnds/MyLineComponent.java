@@ -66,7 +66,7 @@ public class MyLineComponent extends JPanel {
         this.textArea = new JTextField( ""  );
         this.textArea.setBorder( BORDER );
         this.textArea.setPreferredSize( DIM );
-        this.textArea.disable();
+        //this.textArea.disable();
         this.textArea.setHorizontalAlignment( (int) CENTER_ALIGNMENT );
 
         this.textArea.setDropTarget( new DropTarget(){
@@ -124,8 +124,8 @@ public class MyLineComponent extends JPanel {
        textArea.setText( "DATA:" );
        textArea.setBackground( BG_ExistsFile );
        textArea.setDisabledTextColor( FONTCOLOR_ExistsFile );
-       buttonDel.enable();
-       buttonEdit.disable();
+       //buttonDel.enable();
+       //buttonEdit.disable();
     }
 
 
@@ -134,8 +134,8 @@ public class MyLineComponent extends JPanel {
         textArea.setText( EMPTY_TEXT );
         textArea.setBackground( BG_NoFile );
         textArea.setDisabledTextColor( FONTCOLOR_NoFile );
-        buttonDel.disable();
-        buttonEdit.enable();
+        //buttonDel.disable();
+        //buttonEdit.enable();
     }
 }
 
