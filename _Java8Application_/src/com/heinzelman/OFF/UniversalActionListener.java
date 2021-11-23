@@ -5,7 +5,7 @@ import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ButtonActionListener implements ActionListener {
+public class UniversalActionListener implements ActionListener {
 
     private static DropTarget dropTarget;
     private static DropTargetListener dropTargetListener;

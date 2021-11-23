@@ -1,14 +1,18 @@
-package com.heinzelman;
+package com.heinzelman.frontEnds;
 
-import com.sun.javafx.scene.layout.region.Margins;
+import com.heinzelman.AListener;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.TooManyListenersException;
 
 public class MyLineComponent extends JPanel {
 
@@ -23,27 +27,25 @@ public class MyLineComponent extends JPanel {
     private static final Insets INSERTS = new Insets(5, 120, 5, 120);
 
     private static final Dimension DIM = new Dimension ( 140 , 26 );
-    //private static final Font FONT = new Font ("Segoe Script", Font.BOLD, 20);
-
-
+    private static final Font FONT = new Font ("Segoe Script", Font.BOLD, 20);
 
     private static final String EMPTY_TEXT = "DROP PDF HERE";
 
-    private static final FileDrop.Listener listener = new FileDropListener();
 
     private final int type;
     private boolean isEmpty = false;
 
     private final JLabel label;
     private final JTextField textArea;
+    private final JButton buttonAddFile;
     private final JButton buttonEdit;
     private final JButton buttonDel;
 
 
-    public MyLineComponent( int type ) throws HeadlessException {
+    public MyLineComponent( int type , Long baseId, AListener aListener ) throws HeadlessException {
 
         this.type = type;
-        this.label = new JLabel("            ", SwingConstants.RIGHT);
+        this.label = new JLabel("            ", SwingConstants.RIGHT );
         this.label.setPreferredSize( DIM );
 
         switch ( this.type ){
@@ -65,18 +67,48 @@ public class MyLineComponent extends JPanel {
         this.textArea.setBorder( BORDER );
         this.textArea.setPreferredSize( DIM );
         this.textArea.disable();
-        this.textArea.setHorizontalAlignment((int) CENTER_ALIGNMENT);
-        new FileDrop( this.textArea , listener );
+        this.textArea.setHorizontalAlignment( (int) CENTER_ALIGNMENT );
+
+        this.textArea.setDropTarget( new DropTarget(){
+            @Override
+            public synchronized void drop( DropTargetDropEvent dtde ) {
+                aListener.DropFile( type , baseId , dtde );
+            }
+        });
+
+
+
+
+
+        this.buttonAddFile = new JButton(" Add File ");
+        this.buttonAddFile.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                aListener.addFile( type, baseId, e );
+            }
+        });
+
+
 
         this.buttonEdit = new JButton(" Edit ");
-        this.buttonEdit.addActionListener( new ButtonEditActionListener());
-
+        this.buttonEdit.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                aListener.fileEdit( type , baseId , e );
+            }
+        });
 
         this.buttonDel = new JButton(" Delete ");
-        this.buttonDel.addActionListener( new ButtonDelActionListener());
+        this.buttonDel.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                aListener.fileDelete( type, baseId, e );
+            }
+        });
 
 
             this.add( label );
+            this.add( buttonAddFile );
             this.add( textArea );
             this.add( buttonEdit );
             this.add( buttonDel );
@@ -105,48 +137,5 @@ public class MyLineComponent extends JPanel {
         buttonDel.disable();
         buttonEdit.enable();
     }
-
-
-    public void loadContent( Long databaseId ){
-        System.out.println( Main.PATH  + " :: " + databaseId );
-    }
-
 }
 
-
-
-
-
-
- class ButtonEditActionListener implements ActionListener {
-
-    private static DropTarget dropTarget;
-    private static DropTargetListener dropTargetListener;
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        System.out.println( "Edit: " + e );
-
-        JButton myButton = (JButton) e.getSource();
-        MyLineComponent myLineComponent = (MyLineComponent) myButton.getParent();
-        myLineComponent.turnToExistFile();
-    }
-}
-
-
-
-
- class ButtonDelActionListener implements ActionListener {
-
-    private static DropTarget dropTarget;
-    private static DropTargetListener dropTargetListener;
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        System.out.println( "delete !" + e );
-
-        JButton myButton = (JButton) e.getSource();
-        MyLineComponent myLineComponent = (MyLineComponent) myButton.getParent();
-        myLineComponent.turnToNoFile();
-    }
-}
