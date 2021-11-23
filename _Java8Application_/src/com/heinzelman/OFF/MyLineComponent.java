@@ -1,7 +1,5 @@
 package com.heinzelman;
 
-import com.sun.javafx.scene.layout.region.Margins;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;

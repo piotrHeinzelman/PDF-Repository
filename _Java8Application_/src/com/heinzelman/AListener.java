@@ -1,9 +1,12 @@
 package com.heinzelman;
 
+<<<<<<< HEAD
 import com.heinzelman.frontEnds.CodesJList;
 import com.heinzelman.frontEnds.ItemJPanel;
 import com.heinzelman.frontEnds.SearchJPanel;
 
+=======
+>>>>>>> origin/master
 import javax.swing.*;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DropTargetDropEvent;

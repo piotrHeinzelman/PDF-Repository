@@ -1,6 +1,6 @@
-package com.heinzelman;
+package com.heinzelman.files;
 
-import com.sun.javafx.scene.layout.region.Margins;
+import com.heinzelman.Main;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -107,9 +107,7 @@ public class MyLineComponent extends JPanel {
     }
 
 
-    public void loadContent( Long databaseId ){
-        System.out.println( Main.PATH  + " :: " + databaseId );
-    }
+  //  public void loadContent( Long databaseId ){ System.out.println( PATH  + " :: " + databaseId );  }
 
 }
 

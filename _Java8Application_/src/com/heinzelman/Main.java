@@ -1,69 +1,45 @@
 package com.heinzelman;
 
-import com.heinzelman.frontEnds.Window;
-
 import javax.swing.*;
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
-
-import static java.awt.EventQueue.invokeLater;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
-    Object connecttion;
 
-    public static void main  (String[] args) {
+    public static final String PATH = "C:\\temp\\_PDFSYSTEM_\\";
 
-        invokeLater(new Runnable() {
-            @Override public void run() {
-                String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-                //String appConfigPath = rootPath + "com\\heinzelman\\config.ini";
-                String appConfigPath = rootPath + "config.ini";
-                Properties appProps = new Properties();
-                try ( FileInputStream inputStream = new FileInputStream(appConfigPath) ){
-                    appProps.load( inputStream );
-                } catch(RuntimeException | IOException e ) { e.printStackTrace(); }
+    private static Map<Long, String> listProj = new HashMap<>();
+    private static Long selectedId = null;
 
+    public static void main(String[] args) {
 
-                System.out.println( appProps );
-                //connection.connect(appProps.getProperty( "serverAddr" ));
+    MyJFrame frame = new MyJFrame( "PDF Repo"  );
 
+        JComponent jComponent = frame.addToN( new JLabel("?") );
+        JComponent     search = frame.addToN( new MySearchComponent( listProj ) );
 
-                try {
-                    UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-                } catch ( ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e ) { e.printStackTrace(); }
-                new Window().setVisible(true);
-
-
-            }
-        });
-
+        frame.setVisible( true );
     }
 
-                           /*
+    /*
+
+    this.panel = new JPanel();
+this.panel.setLayout(new FlowLayout());
+add(panel, BorderLayout.CENTER);
+JButton button = new JButton("CLICK HERE");
+add(button, BorderLayout.SOUTH);
+button.addActionListener(this);
+setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+setSize(500, 500);
+setVisible(true);
+
+this.panel.add(new JButton("Button"));
+this.panel.revalidate();
+validate();
+
+     */
 
 
-
-
-                Properties catalogProps = new Properties();
-                catalogProps.load(new FileInputStream(catalogConfigPath));
-
-
-                String appVersion = appProps.getProperty("version");
-                assertEquals("1.0", appVersion);
-
-                assertEquals("files", catalogProps.getProperty("c1"));
-                        */
-
-
-        /*
-        javax.swing.UIManager$LookAndFeelInfo[Metal javax.swing.plaf.metal.MetalLookAndFeel]
-        javax.swing.UIManager$LookAndFeelInfo[Nimbus javax.swing.plaf.nimbus.NimbusLookAndFeel]
-        javax.swing.UIManager$LookAndFeelInfo[CDE/Motif com.sun.java.swing.plaf.motif.MotifLookAndFeel]
-        javax.swing.UIManager$LookAndFeelInfo[Windows com.sun.java.swing.plaf.windows.WindowsLookAndFeel]
-        javax.swing.UIManager$LookAndFeelInfo[Windows Classic com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel]
-        */
 
 }
 
