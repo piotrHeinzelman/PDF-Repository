@@ -1,4 +1,4 @@
-package com.heinzelman.pegaz;
+package com.heinzelman.pegaz.tools;
 
 /*=====================================================================
 File: 	 ConnectDataSource.java
@@ -19,6 +19,7 @@ THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
 PARTICULAR PURPOSE.
 =====================================================================*/
 
+import com.heinzelman.pegaz.Model;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 
 import java.sql.CallableStatement;
@@ -32,23 +33,37 @@ import java.util.Map;
 public class ConnectDataSource {
 
     private Long lastId;
+    private final MyConfig myConfig;
+    private Model model;
 
     //get_like( @projName VARCHAR(50)
 
 
+    public ConnectDataSource( MyConfig myConfig ) {
+        this.myConfig = myConfig;
+        this.model=model;
+    }
+
+    private SQLServerDataSource getDS(){
+        SQLServerDataSource ds = new SQLServerDataSource();
+
+        ds.setUser(myConfig.getUser());
+        ds.setPassword(myConfig.getPassword());
+        ds.setServerName(myConfig.getServername());
+        ds.setPortNumber(Integer.parseInt(myConfig.getPortnumber()));
+        ds.setDatabaseName(myConfig.getDatabasename());
+
+        return ds;
+    }
 
 
-    public Map<Long, String> getLike( String likeName ) {
+
+
+    public Map<Long, String> getLike(String likeName ) {
 
         Map<Long, String> map = new HashMap<>();
 
-        SQLServerDataSource ds = new SQLServerDataSource();
-
-        ds.setUser("PG_Znak_Wodny_User");
-        ds.setPassword("PG4d@t@");
-        ds.setServerName("argo.grupazpr.pl");
-        ds.setPortNumber(Integer.parseInt("1433"));
-        ds.setDatabaseName("PG_Znak_Wodny");
+        SQLServerDataSource ds = getDS();
 
         try (Connection con = ds.getConnection();
             CallableStatement cstmt = con.prepareCall("exec get_like ? ");) {
@@ -80,14 +95,7 @@ public class ConnectDataSource {
         Map<Long, String> map = new HashMap<>();
 
         // Create datasource.
-        SQLServerDataSource ds = new SQLServerDataSource();
-
-        ds.setUser("PG_Znak_Wodny_User");
-        ds.setPassword("PG4d@t@");
-        ds.setServerName("argo.grupazpr.pl");
-        ds.setPortNumber(Integer.parseInt("1433"));
-        ds.setDatabaseName("PG_Znak_Wodny");
-
+        SQLServerDataSource ds = getDS();
 
         try (Connection con = ds.getConnection();
              CallableStatement cstmt = con.prepareCall("execute get_all ");) {
@@ -106,29 +114,15 @@ public class ConnectDataSource {
 
 
 
-
-
-
-
-
-
-
     public Long addProject( String projName ) {
 
         // Create datasource.
-        SQLServerDataSource ds = new SQLServerDataSource();
-
-        ds.setUser("PG_Znak_Wodny_User");
-        ds.setPassword("PG4d@t@");
-        ds.setServerName("argo.grupazpr.pl");
-        ds.setPortNumber(Integer.parseInt("1433"));
-        ds.setDatabaseName("PG_Znak_Wodny");
-
+        SQLServerDataSource ds = getDS();
 
         try (Connection con = ds.getConnection();
             CallableStatement cstmt = con.prepareCall("exec addProj ?");) {
 
-            cstmt.setString(1, projName );
+            cstmt.setString(1, projName.toUpperCase() );
             ResultSet rs = cstmt.executeQuery();
 
             // Iterate through the data in the result set and display it.

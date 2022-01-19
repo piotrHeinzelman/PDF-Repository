@@ -2,6 +2,7 @@ package com.heinzelman.pegaz.frontEnds;
 
 
 
+import com.heinzelman.pegaz.MyCommand;
 import com.heinzelman.pegaz.PegazApplication;
 
 import javax.swing.*;
@@ -11,9 +12,9 @@ public class ItemJPanel extends JPanel {
 
     private PegazApplication aListener;
     private JLabel jLabel;
-    private MyLineComponent[] lines = new MyLineComponent[10];
 
-    public ItemJPanel(PegazApplication aListener ){
+
+    public ItemJPanel( MyCommand myCommand ){
         super();
         this.aListener = aListener;
         this.jLabel = new JLabel(" ** PANEL ** " , SwingConstants.CENTER );
@@ -26,8 +27,8 @@ public class ItemJPanel extends JPanel {
         this.removeAll();
         this.add( "label" , jLabel  );
         for ( int type = 1 ; type < 11 ; type++ ) {
-            lines[type%10] = new MyLineComponent( type%10 , baseId , aListener );
-            this.add( lines[type%10] );
+          //  lines[type%10] = new MyLineComponent( type%10 , baseId , aListener );
+          //  this.add( lines[type%10] );
         }
 
         jLabel.setText( baseId + " :: " + name  );
