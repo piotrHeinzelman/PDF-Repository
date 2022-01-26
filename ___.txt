@@ -1,2 +1,0 @@
-javac \com\heinzelman\prog
-java com.heinzelman.prog
